@@ -15,7 +15,7 @@
         "code": "CIS1001",
         "name": "Introduction to Academics in Computer Science",
         "creditno": 1,
-        "prerequisite": []
+        "prerequisites": []
     },
     {
         "code": "CIS1051",
@@ -48,49 +48,49 @@
         "prerequisites": ["CIS1051"]
     },
     {
-        "code": "CIS 2168",
+        "code": "CIS2168",
         "name": "Data Structures",
         "creditno": 4,
         "prerequisites": ["CIS1068", "MATH1041", "CIS1166"]
     },
     {
-        "code": "CIS 2107",
+        "code": "CIS2107",
         "name": "Computer Systems and Low-Level Programming",
         "creditno": 4,
         "prerequisites": ["CIS1068"]
     },
     {
-        "code": "CIS 2033",
+        "code": "CIS2033",
         "name": "Computational Probability and Statistics",
         "creditno": 3,
         "prerequisites": ["MATH1042", "CIS1068"]
     },
     {
-        "code": "CIS 2166",
+        "code": "CIS2166",
         "name": "Mathematical Concepts in Computing II",
         "creditno": 4,
         "prerequisites": ["CIS1166", "MATH1042"]
     },
     {
-        "code": "CIS 3207",
+        "code": "CIS3207",
         "name": "Introduction to Systems Programming and Operating Systems",
         "creditno": 4,
         "prerequisites": ["CIS2107", "CIS2168", "CIS1166"]
     },
     {
-        "code": "CIS 3223",
+        "code": "CIS3223",
         "name": "Data Structures and Algorithms",
         "creditno": 4,
         "prerequisites": ["CIS2166", "CIS2168", "MATH1042"]
     },
     {
-        "code": "CIS 3296",
+        "code": "CIS3296",
         "name": "Software Design",
         "creditno": 4,
         "prerequisites": ["CIS3207", "CIS2168"]
     },
     {
-        "code": "CIS 4398",
+        "code": "CIS4398",
         "name": "Projects in Computer Science",
         "creditno": 4,
         "prerequisites": ["CIS3296", "CIS3223"]
