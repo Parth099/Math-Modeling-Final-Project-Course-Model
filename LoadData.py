@@ -1,7 +1,7 @@
 import json as JSON
 from Course import Course
 
-from typing import List
+from typing import List, Union, Tuple, Dict
 
 CourseType = Course
 
@@ -14,7 +14,7 @@ def loadJson(path_to_json: str):
     return data
 
 # take json data to <Course>
-def jsonToCourse(json_data: list) -> dict[str, CourseType]:
+def jsonToCourse(json_data: list) -> Dict[str, CourseType]:
 
     course_dict: dict[str, CourseType] = {}
 
@@ -44,3 +44,7 @@ COURSE_DATA_PATH = "./data/prereq.json"        # path to file to be load
 DATA = loadJson(COURSE_DATA_PATH)              # load file
 COURSES = jsonToCourse(DATA)                   # file -> json 
 
+# generate a course to  mapping (ex: CIS1068 -> 0, CIS2168 -> 1, ...)
+ENUMERATED_COURSES: List[Tuple[str, int]] = [tuple(entry) for entry in list(map(reversed, enumerate(COURSES.keys())))] 
+ENUMERATED_COURSES_REV: Dict[str, int]  = dict(ENUMERATED_COURSES)
+GRAPH_LABELS = {enum: course_name for course_name, enum in ENUMERATED_COURSES_REV.items()}
