@@ -2,25 +2,31 @@ import networkx as nx
 import matplotlib.pyplot as plt 
 
 from random import shuffle
-from LoadData import COURSES, ENUMERATED_COURSES, ENUMERATED_COURSES_REV, GRAPH_LABELS
 
-from typing import Tuple, List
+from Course import Course
+from LoadData import COURSES, ENUMERATED_COURSES_MAPPING, GRAPH_LABELS
 
-edges: List[Tuple[int, int]] = []
-G = nx.DiGraph()
+from typing import Tuple, List, Dict, Type
 
-print(ENUMERATED_COURSES_REV)
+def gen_DAG_from_course_dict(Course_dict: Dict[str, 'Course'], course_to_int_dict: Dict[str, int]):
+    G = nx.DiGraph()
 
-for course, course_data in COURSES.items():
-    src_integer_value = ENUMERATED_COURSES_REV[course]
+    for course, course_data in Course_dict.items():
+        src_integer_value = course_to_int_dict[course]
 
-    if not course_data.prerequisites:
-        G.add_node(src_integer_value)
-        continue
+        # no prerequisites -> no connections
+        if not course_data.prerequisites:
+            G.add_node(src_integer_value)
+            continue
 
-    for prereq in course_data.prerequisites:
-        preq_integer_value = ENUMERATED_COURSES_REV[prereq.code]
-        G.add_edge(preq_integer_value, src_integer_value)
+        for prereq in course_data.prerequisites:
+            preq_integer_value = course_to_int_dict[prereq.code]
+            G.add_edge(preq_integer_value, src_integer_value)
 
+    return G
 
-# nx.all_topological_sorts(G)
+COURSE_DAG = gen_DAG_from_course_dict(COURSES, ENUMERATED_COURSES_MAPPING)
+# TPS = nx.all_topological_sorts(COURSE_DAG)
+
+nx.draw_networkx(COURSE_DAG, with_labels=True, labels=GRAPH_LABELS)
+plt.show()

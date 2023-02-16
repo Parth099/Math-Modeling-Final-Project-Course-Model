@@ -46,5 +46,5 @@ COURSES = jsonToCourse(DATA)                   # file -> json
 
 # generate a course to  mapping (ex: CIS1068 -> 0, CIS2168 -> 1, ...)
 ENUMERATED_COURSES: List[Tuple[str, int]] = [tuple(entry) for entry in list(map(reversed, enumerate(COURSES.keys())))] 
-ENUMERATED_COURSES_REV: Dict[str, int]  = dict(ENUMERATED_COURSES)
-GRAPH_LABELS = {enum: course_name for course_name, enum in ENUMERATED_COURSES_REV.items()}
+ENUMERATED_COURSES_MAPPING: Dict[str, int]  = dict(ENUMERATED_COURSES)
+GRAPH_LABELS = {enum: course_name for course_name, enum in ENUMERATED_COURSES_MAPPING.items()}
