@@ -1,15 +1,11 @@
 import networkx as nx
-import matplotlib.pyplot as plt 
-
-from random import shuffle
 
 from Course import Course
-from LoadData import COURSES, ENUMERATED_COURSES_MAPPING, GRAPH_LABELS
+from LoadData import COURSES, ENUMERATED_COURSES_MAPPING
 
-from typing import Tuple, List, Dict, Type
+from typing import List, Dict
 
-
-# constant
+# constants
 NODE_COLOR = "#a41e35"
 NODES_PER_LAYER = 5
 
@@ -18,6 +14,8 @@ def gen_DAG_from_course_dict(Course_dict: Dict[str, 'Course'], course_to_int_dic
     G = nx.DiGraph()
 
     node_numbers: List[int] = course_to_int_dict.values()
+
+    # initially gen all nodes and assign them to a layer to later create a multipartite graph
     [G.add_node(num, subset=num % NODES_PER_LAYER) for num in node_numbers]
 
     # add the connection
@@ -34,13 +32,13 @@ def gen_DAG_from_course_dict(Course_dict: Dict[str, 'Course'], course_to_int_dic
 
     return G
 
-COURSE_DAG = gen_DAG_from_course_dict(COURSES, ENUMERATED_COURSES_MAPPING)
-# TPS = nx.all_topological_sorts(COURSE_DAG)
-
-nx.draw_networkx(COURSE_DAG, 
+def draw_graph(graph_labels: Dict[int, str]):
+    nx.draw_networkx(COURSE_DAG, 
                 with_labels=True, 
-                labels=GRAPH_LABELS, 
+                labels=graph_labels, 
                 pos=nx.multipartite_layout(COURSE_DAG, align="vertical"), 
                 node_color=NODE_COLOR)
 
-plt.show()
+COURSE_DAG = gen_DAG_from_course_dict(COURSES, ENUMERATED_COURSES_MAPPING)
+
+
