@@ -1,10 +1,12 @@
 import sys, os
 sys.path.insert(0, os.getcwd()) # add this module to $path to allow python to find it later
 
-from JsonLoader import JsonLoader
+from dataloader.JsonLoader import JsonLoader
 from typing import Dict
 
 from Course import Course
+
+
 
 class CourseDataLoader(JsonLoader):
 	def __init__(self, path: str) -> None:
@@ -12,13 +14,14 @@ class CourseDataLoader(JsonLoader):
 		super().__init__(path)
 
 		# take data and serialize it
-		self.course_info = self.jsonToCourse(self.data)
+		# this variable maps name of course to all of its information
+		self.course_info = self.jsonToCourse(self.data) 
 
 		# create graph labels and integer mappings
 		self.course_map, self.graph_labels = self.generateMetaDataFromCourseDict(self.course_info)
 
 		
-	def jsonToCourse(json_data: list) -> Dict[str, Course]:
+	def jsonToCourse(self, json_data: list) -> Dict[str, Course]:
 		"""take a json file and turn it into a dict based on the outermost key where each value is a (cached) Course Object"""
 
 		course_dict: dict[str, Course] = {}
@@ -44,7 +47,7 @@ class CourseDataLoader(JsonLoader):
 		# return the cache
 		return course_dict
 
-	def generateMetaDataFromCourseDict(course_dict: Dict[str, Course]):
+	def generateMetaDataFromCourseDict(self, course_dict: Dict[str, Course]):
 		"""
 		Generates:
 			(1) dict where integer maps to course_name\n
