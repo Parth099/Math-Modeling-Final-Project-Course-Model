@@ -15,6 +15,7 @@ def loadJson(path_to_json: str):
 
 # take json data to <Course>
 def jsonToCourse(json_data: list) -> Dict[str, CourseType]:
+    """take a json file and turn it into a dict based on the outermost key where each value is a (cached) Course Object"""
 
     course_dict: dict[str, CourseType] = {}
 
@@ -39,12 +40,28 @@ def jsonToCourse(json_data: list) -> Dict[str, CourseType]:
     # return the cache
     return course_dict
     
+def generateMetaDataFromCourseDict(course_dict: Dict[str, CourseType]):
+    """
+    Generates:
+        (1) dict where integer maps to course_name\n
+        (2) reversed dict (1)
+    """
+
+    # dict (1)
+    int_to_name: Dict[int, str] = dict(enumerate(course_dict.keys()))
+
+
+    # dict (2) 
+    name_to_int: Dict[str, int] = {value: key for (key, value) in int_to_name.items() }
+
+    return int_to_name, name_to_int
+    
+
+
+
 
 COURSE_DATA_PATH = "./data/prereq.json"        # path to file to be load
 DATA = loadJson(COURSE_DATA_PATH)              # load file
 COURSES = jsonToCourse(DATA)                   # file -> json 
 
-# generate a course to  mapping (ex: CIS1068 -> 0, CIS2168 -> 1, ...)
-ENUMERATED_COURSES: List[Tuple[str, int]] = [tuple(entry) for entry in list(map(reversed, enumerate(COURSES.keys())))] 
-ENUMERATED_COURSES_MAPPING: Dict[str, int]  = dict(ENUMERATED_COURSES)
-GRAPH_LABELS = {enum: course_name for course_name, enum in ENUMERATED_COURSES_MAPPING.items()}
+GRAPH_LABELS, ENUMERATED_COURSES_MAPPING = generateMetaDataFromCourseDict(COURSES) # metadata to label graph nodes

@@ -6,6 +6,5 @@ from Graph_Generation import draw_graph
 
 from LoadData import GRAPH_LABELS
 
-draw_graph(GRAPH_LABELS)
-plt.show()
-
+draw_graph(G, GRAPH_LABELS)
+plt.savefig('./img/CIS.png')

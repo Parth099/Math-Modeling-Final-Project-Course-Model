@@ -32,13 +32,12 @@ def gen_DAG_from_course_dict(Course_dict: Dict[str, 'Course'], course_to_int_dic
 
     return G
 
-def draw_graph(graph_labels: Dict[int, str]):
-    nx.draw_networkx(COURSE_DAG, 
+def draw_graph(graph: nx.Graph, graph_labels: Dict[int, str]):
+    '''draws a graph given labels and a networkx graph'''
+    nx.draw_networkx(graph, 
                 with_labels=True, 
                 labels=graph_labels, 
                 pos=nx.multipartite_layout(COURSE_DAG, align="vertical"), 
                 node_color=NODE_COLOR)
 
 COURSE_DAG = gen_DAG_from_course_dict(COURSES, ENUMERATED_COURSES_MAPPING)
-
-
