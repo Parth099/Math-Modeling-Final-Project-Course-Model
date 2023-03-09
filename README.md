@@ -7,7 +7,13 @@ Required Modules are located in `requirements.txt`
 
 If this item is not included it can be generated via:
 
-```
+```shell
 pip install pipreqsnb
 pipreqsnb .
+```
+
+To install all dependencies:
+
+```shell
+pip install -r ./requirements.txt
 ```
