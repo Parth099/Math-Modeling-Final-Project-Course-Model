@@ -1,12 +1,7 @@
-import sys, os
-sys.path.insert(0, os.getcwd()) # add this module to $path to allow python to find it later
-
 from dataloader.JsonLoader import JsonLoader
 from typing import Dict
 
-from Course import Course
-
-
+from Models.Course import Course
 
 class CourseDataLoader(JsonLoader):
 	def __init__(self, path: str) -> None:

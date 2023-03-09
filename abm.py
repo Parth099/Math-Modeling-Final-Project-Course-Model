@@ -1,10 +1,18 @@
+import sys, os
+sys.path.insert(0, os.getcwd()) # add this module to $path to allow python to find it later
+
 import networkx as nx
 import matplotlib.pylab as plt
 
-from Graph_Generation import COURSE_DAG as G
-from Graph_Generation import draw_graph
+from dataloader.CourseLoader import CourseDataLoader
+from GraphGeneration.DAGGenerator import DAGGenerator
 
-from LoadData import GRAPH_LABELS
 
-draw_graph(G, GRAPH_LABELS)
-plt.savefig('./img/CIS.png')
+COURSE_DATA_PATH = "./data/prereq.json"        # path to file to be load
+CDL = CourseDataLoader(COURSE_DATA_PATH)
+DAG = DAGGenerator(CDL.course_info, CDL.course_map)
+
+DEFAULT_LABELS = CDL.graph_labels
+
+DAG.draw_graph(DEFAULT_LABELS)
+plt.show()
