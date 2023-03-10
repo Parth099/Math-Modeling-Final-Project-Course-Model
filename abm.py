@@ -15,4 +15,7 @@ DAG = DAGGenerator(CDL.course_info, CDL.course_map)
 DEFAULT_LABELS = CDL.graph_labels
 
 fig, ax =  DAG.draw_graph(DEFAULT_LABELS)
-plt.show()
+orders = DAG.generate_K_topological_orderings(30, 0.0001)
+
+for order in orders:
+    print(order)
