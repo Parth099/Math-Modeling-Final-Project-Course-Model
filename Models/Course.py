@@ -6,10 +6,11 @@ This file defines the <Course> Object used to
 from typing import List
 
 class Course: 
-    def __init__(self, code: str, name: str, creditno: int, preqs: List['Course'] = []) -> None:
-        self.code = code
-        self.name = name
-        self.creditno = creditno
+    def __init__(self, code: str, name: str, classsize: int, creditno: int, preqs: List['Course'] = []) -> None:
+        self.code          = code
+        self.name          = name
+        self.creditno      = creditno
+        self.classsize     = classsize
         self.prerequisites = preqs
 
     def __str__(self) -> str:

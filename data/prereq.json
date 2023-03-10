@@ -3,96 +3,112 @@
         "code": "ENG0802",
         "name": "Analytical Reading and Writing",
         "creditno": 4,
+        "classsize": 40,
         "prerequisites": []
     },
     {
         "code": "SCTC1001",
         "name": "CST First Year Seminar",
         "creditno": 1,
-        "prerequisites": []
-    },
-    {
-        "code": "CIS1001",
-        "name": "Introduction to Academics in Computer Science",
-        "creditno": 1,
+        "classsize": 40,
         "prerequisites": []
     },
     {
         "code": "CIS1051",
         "name": "Introduction to Problem Solving and Programming in Python",
         "creditno": 4,
+        "classsize": 40,
         "prerequisites": []
     },
     {
-        "code": "CIS1166",
-        "name": "Mathematical Concepts in Computing I",
-        "creditno": 4,
+        "code": "CIS1001",
+        "name": "Introduction to Academics in Computer Science",
+        "creditno": 1,
+        "classsize": 40,
         "prerequisites": []
     },
     {
         "code": "MATH1041",
         "name": "Calculus I",
         "creditno": 4,
+        "classsize": 40,
+        "prerequisites": []
+    },
+    {
+        "code": "CIS1166",
+        "name": "Mathematical Concepts in Computing I",
+        "creditno": 4,
+        "classsize": 40,
         "prerequisites": []
     },
     {
         "code": "MATH1042",
         "name": "Calculus II",
         "creditno": 4,
+        "classsize": 40,
         "prerequisites": ["MATH1041"]
     },
     {
         "code": "CIS1068",
         "name": "Program Design and Abstraction",
         "creditno": 4,
+        "classsize": 40,
         "prerequisites": ["CIS1051"]
     },
     {
         "code": "CIS2168",
         "name": "Data Structures",
         "creditno": 4,
+        "classsize": 40,
         "prerequisites": ["CIS1068", "MATH1041", "CIS1166"]
     },
     {
         "code": "CIS2107",
         "name": "Computer Systems and Low-Level Programming",
         "creditno": 4,
+        "classsize": 40,
         "prerequisites": ["CIS1068"]
     },
     {
         "code": "CIS2033",
         "name": "Computational Probability and Statistics",
         "creditno": 3,
+        "classsize": 40,
         "prerequisites": ["MATH1042", "CIS1068"]
     },
     {
         "code": "CIS2166",
         "name": "Mathematical Concepts in Computing II",
         "creditno": 4,
+        "classsize": 40,
         "prerequisites": ["CIS1166", "MATH1042"]
     },
     {
         "code": "CIS3207",
         "name": "Introduction to Systems Programming and Operating Systems",
         "creditno": 4,
+        "classsize": 40,
         "prerequisites": ["CIS2107", "CIS2168", "CIS1166"]
     },
     {
         "code": "CIS3223",
         "name": "Data Structures and Algorithms",
         "creditno": 4,
+        "classsize": 40,
         "prerequisites": ["CIS2166", "CIS2168", "MATH1042"]
     },
     {
         "code": "CIS3296",
         "name": "Software Design",
         "creditno": 4,
+        "classsize": 40,
         "prerequisites": ["CIS3207", "CIS2168"]
     },
     {
         "code": "CIS4398",
         "name": "Projects in Computer Science",
         "creditno": 4,
+        "classsize": 40,
         "prerequisites": ["CIS3296", "CIS3223"]
     }
 ]
