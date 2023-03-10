@@ -1,4 +1,5 @@
 import networkx as nx
+import matplotlib.pyplot as plt
 
 from Models.Course import Course
 from typing import Dict
@@ -37,9 +38,15 @@ class DAGGenerator():
 
     def draw_graph(self, graph_labels: Dict[int, str]):
         '''draws a graph given `graph_labels`'''
+        
+        fig, ax = plt.subplots()
+        
         nx.draw_networkx(self.G, 
                     with_labels=True, 
                     labels=graph_labels, 
                     pos=nx.multipartite_layout(self.G, align="vertical"), 
-                    node_color=DAGGenerator.NODE_COLOR)
+                    node_color=DAGGenerator.NODE_COLOR,
+                    ax=ax)
+        
+        return fig, ax
 

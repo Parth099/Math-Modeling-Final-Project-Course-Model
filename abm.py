@@ -14,5 +14,5 @@ DAG = DAGGenerator(CDL.course_info, CDL.course_map)
 
 DEFAULT_LABELS = CDL.graph_labels
 
-DAG.draw_graph(DEFAULT_LABELS)
+fig, ax =  DAG.draw_graph(DEFAULT_LABELS)
 plt.show()
