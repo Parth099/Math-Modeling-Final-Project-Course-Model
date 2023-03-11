@@ -4,6 +4,8 @@ from typing import Dict
 from Models.Course import Course
 
 class CourseDataLoader(JsonLoader):
+	"""object that loads in course data based on a json object"""
+    
 	def __init__(self, path: str) -> None:
 		# load in json (this generates self.data)
 		super().__init__(path)
