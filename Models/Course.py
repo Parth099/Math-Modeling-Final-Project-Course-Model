@@ -13,5 +13,8 @@ class Course:
         self.classsize     = classsize
         self.prerequisites = preqs
 
+        self.grading__mu    = None        
+        self.grading__sigma = None
+
     def __str__(self) -> str:
         return self.code
