@@ -1,15 +1,25 @@
-from Course import Course
-from Student import Student
+from Models.Course import Course
+from Models.Student import Student
+
+from random import shuffle
 
 from typing import List, Dict
 
 class Scheduler:
 	"""Scheduler takes steps WRT open courses and availble"""
  
-	def __init__(self, Courses: List[Course], Students: List[Student], course_map: Dict[str, int]) -> None:
-		self.courses  = Courses
+	CREDITS_THRESHOLD = 14
+ 
+	def __init__(self, Courses: Dict[str, Course], Students: List[Student], course_map: Dict[str, int]) -> None:
 		self.students = Students
 		self.course_map = course_map
+  
+		self.courses: Dict[int, Course]  = {}
+
+		# create an int -> info map to be used later
+		for name, int_mapping in course_map.items():
+			self.courses[int_mapping] = Courses.get(name)
+	
   
 	def student_can_take_class(self, student: Student, course: Course) -> bool:
 		"""returns T/F on whether a Student `student` can take a Course `course`
@@ -41,9 +51,32 @@ class Scheduler:
 		# if each of the numbers in prereqs appears in completed_classes, this student can take that class
 		return all([class_num in completed_classes_int for class_num in prereqs_int])
 	
-	def select_classes():
+	def select_classes(self):
 		"""select class based on availble classes"""
-		pass
+		
+		# shuffle array of students to give each one a fair chance of selecting first
+		shuffle(self.students) # (inplace sort)
+  
+		for stu in self.students:
+			
+			# order the student wants
+			ordering = stu.course_plan
+
+			for course in ordering:
+		
+				C = self.courses.get(course)
+    
+				if C is None:
+					raise ValueError("Course $C is none")
+    
+				# if student has registered for enough classes, allow other students to register
+				if stu.curr_credit_count >= Scheduler.CREDITS_THRESHOLD:
+					break
+ 
+				if self.student_can_take_class(stu, C):
+					stu.assign_class(C)
+
+	
 
 
 	

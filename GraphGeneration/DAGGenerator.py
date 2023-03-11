@@ -2,7 +2,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 from random import random as rand
 
-from Models.Course import Course
+from Scheduling.Models.Course import Course
 from typing import Dict, List
 
 OrderingList = List[List[int]]

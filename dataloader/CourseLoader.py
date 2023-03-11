@@ -1,7 +1,7 @@
 from dataloader.JsonLoader import JsonLoader
 from typing import Dict
 
-from Models.Course import Course
+from Scheduling.Models.Course import Course
 
 class CourseDataLoader(JsonLoader):
 	"""object that loads in course data based on a json object"""
