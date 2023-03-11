@@ -1,5 +1,5 @@
-from Models.Course import Course
-from Models.Student import Student
+from Scheduling.Models.Course import Course
+from Scheduling.Models.Student import Student
 
 from random import shuffle
 
@@ -40,18 +40,18 @@ class Scheduler:
 		completed_classes = student.has_taken
   
 		# make each class to its integer representation
-		completed_classes_int = [self.course_map[_course['code']] for _course in completed_classes]
+		completed_classes_int = [self.course_map[_course.code] for _course in completed_classes]
 
 		# get into prereqs
 		prereqs = course.prerequisites
 
 		# map each item to a number
-		prereqs_int = [self.course_map[prereq['code']] for prereq in prereqs]
+		prereqs_int = [self.course_map[prereq.code] for prereq in prereqs]
 
 		# if each of the numbers in prereqs appears in completed_classes, this student can take that class
 		return all([class_num in completed_classes_int for class_num in prereqs_int])
 	
-	def select_classes(self):
+	def assign_classes(self):
 		"""select class based on availble classes"""
 		
 		# shuffle array of students to give each one a fair chance of selecting first
@@ -76,7 +76,9 @@ class Scheduler:
 				if self.student_can_take_class(stu, C):
 					stu.assign_class(C)
 
-	
 
-
-	
+	def increment_semester(self):
+		"""Move each student up a semester"""
+		for stu in self.students:
+			stu.increment_semester()
+			

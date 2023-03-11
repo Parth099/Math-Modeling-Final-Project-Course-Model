@@ -1,5 +1,5 @@
 from typing import List, Dict
-from Course import Course
+from Scheduling.Models.Course import Course
 
 from numpy.random import normal
 
@@ -50,7 +50,6 @@ class Student:
     def increment_semester(self) -> None:
         """represents the end of a semester"""
         mu, sigma = 70, 10
-        
         for course in self.is_taking:
             received_grade = Student.generate_grade(mu, sigma)
             

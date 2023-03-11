@@ -18,3 +18,6 @@ class Course:
 
     def __str__(self) -> str:
         return self.code
+    
+    def __repr__(self) -> str:
+        return self.__str__()
