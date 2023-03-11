@@ -26,7 +26,7 @@ courses  = CDL.course_info
 scheduler = Scheduler(courses, students, CDL.course_map)
 scheduler.assign_classes()
 
-while 1:
+while all([not stu.is_finished for stu in students]):
     for stu in scheduler.students:
         print(f'{stu.name} in Semester: {stu.semester}')
         print("Taking: ", stu.is_taking)
@@ -34,7 +34,6 @@ while 1:
         print("Failed: ", stu.has_failed)  
         print("-" * 50)
         
-    input()
     scheduler.increment_semester()
     scheduler.assign_classes()
 

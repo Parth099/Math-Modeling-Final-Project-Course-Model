@@ -59,6 +59,8 @@ class Scheduler:
   
 		for stu in self.students:
 			
+			if stu.is_finished:	continue
+   
 			# order the student wants
 			ordering = stu.course_plan
 
@@ -66,12 +68,10 @@ class Scheduler:
 		
 				C = self.courses.get(course)
     
-				if C is None:
-					raise ValueError("Course $C is none")
+				if C is None: raise ValueError("Course $C is none")
     
 				# if student has registered for enough classes, allow other students to register
-				if stu.curr_credit_count >= Scheduler.CREDITS_THRESHOLD:
-					break
+				if stu.curr_credit_count >= Scheduler.CREDITS_THRESHOLD: break
  
 				if self.student_can_take_class(stu, C):
 					stu.assign_class(C)

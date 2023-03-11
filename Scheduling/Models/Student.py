@@ -28,12 +28,15 @@ class Student:
         
         self.curr_credit_count = 0
         Student.student_count += 1
+        self.is_finished = False
         
         
     def assign_class(self, course: Course):
         self.is_taking.append(course)
         self.curr_credit_count += course.creditno
-        
+    
+    def update_finished_status(self):
+        self.is_finished = len(self.has_taken) == len(self.course_map)
     
     @staticmethod
     def generate_grade(mu: float, sigma: float):
@@ -67,5 +70,6 @@ class Student:
         self.is_taking = []
         self.semester += 1
         self.curr_credit_count = 0
+        self.update_finished_status()
         
     
