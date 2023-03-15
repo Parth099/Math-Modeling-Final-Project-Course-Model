@@ -40,6 +40,11 @@ class Student:
         # update school count
         Student.student_count += 1
         
+        # history (pass fail only)
+        # map semester (into) to all courses taken that semester (str[]) with their P/F state
+        self.history: Dict[int, Dict[str, bool]] = {}
+        
+        
     def assign_class(self, course: Course):
         self.is_taking.append(course)
         self.curr_credit_count += course.creditno
@@ -77,19 +82,27 @@ class Student:
     def increment_semester(self) -> None:
         """represents the end of a semester, this function assigns grades and places courses into correct categories: passed + failing"""
         
+        # history fragment keeps history of this semster
+        history_fragment: Dict[str, bool] = {}
+        
         for course in self.is_taking:
             received_grade = self.generate_grade(course)
+            hasPassed = received_grade > Student.FAILING_GRADE
             
-            if received_grade <= Student.FAILING_GRADE: self.has_failed[course.code] += 1
-            else: 
+            if hasPassed: 
                 self.has_taken.append(course)
-                
                 passed_class = self.course_map.get(course.code)
                 
                 # remove class from plan now that it is used
                 if passed_class in self.course_plan: self.course_plan.remove(passed_class)
-                
+
+            else: self.has_failed[course.code] += 1
+            
+            history_fragment[course.code] = hasPassed
             self.grades[course.code] = received_grade
+            
+        # history
+        self.history[self.semester] = history_fragment
             
         # empty out course list for this semester
         self.is_taking = []
@@ -99,5 +112,7 @@ class Student:
 
         # check if student has graduated
         self.update_finished_status()
+    
+        
         
     

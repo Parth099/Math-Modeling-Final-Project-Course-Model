@@ -37,15 +37,12 @@ scheduler = Scheduler(courses, students, CDL.course_map)
 scheduler.assign_classes()
 
 while not all([stu.is_finished for stu in students]):
-    for stu in scheduler.students:
-        print(f'{stu.name} in Semester: {stu.semester}')
-        print("Taking: ", stu.is_taking)
-        print("Taken : ", stu.has_taken)
-        print("Failed: ", stu.has_failed)  
-        print("-" * 50)
-        
+
     scheduler.increment_semester()
     scheduler.assign_classes()
-    input()
     
-    print("\nNEW SEMESTER\n")
+    
+for stu in scheduler.students:
+    for i, D in stu.history.items():
+        print(i, D)
+    print("\n\n")

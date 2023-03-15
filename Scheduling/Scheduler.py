@@ -119,4 +119,5 @@ class Scheduler:
 		
 		# reset capacity
 		self.read_class_capacity(self.courses)
+		
 			
