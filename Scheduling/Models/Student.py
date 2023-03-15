@@ -1,5 +1,7 @@
-from typing import List, Dict
+from typing import List, Dict, DefaultDict
 from Scheduling.Models.Course import Course
+
+from collections import defaultdict
 
 from numpy.random import normal
 
@@ -24,7 +26,7 @@ class Student:
 		# state to keep track of what classes student is taking/taken
         self.has_taken:  List[Course] = [] # can also be used as a history
         self.is_taking:  List[Course] = []
-        self.has_failed: List[Course] = []
+        self.has_failed: DefaultDict[str, int] = defaultdict(int)
         
         self.curr_credit_count = 0
         Student.student_count += 1
@@ -56,7 +58,7 @@ class Student:
         for course in self.is_taking:
             received_grade = Student.generate_grade(mu, sigma)
             
-            if received_grade <= Student.FAILING_GRADE: self.has_failed.append(course)
+            if received_grade <= Student.FAILING_GRADE: self.has_failed[course.code] += 1
             else: 
                 self.has_taken.append(course)
                 
@@ -70,6 +72,8 @@ class Student:
         self.is_taking = []
         self.semester += 1
         self.curr_credit_count = 0
+        
+        # check if student has graduated
         self.update_finished_status()
         
     
