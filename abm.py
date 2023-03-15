@@ -27,11 +27,8 @@ CDL = CourseDataLoader(COURSE_DATA_PATH)
 DAG = DAGGenerator(CDL.course_info, CDL.course_map)
 
 DEFAULT_LABELS = CDL.graph_labels
-DAG.draw_graph(DEFAULT_LABELS)
-#plt.show()
 
-fig, ax =  DAG.draw_graph(DEFAULT_LABELS)
-orders = DAG.generate_K_topological_orderings(2, 0.001)
+orders = DAG.generate_K_topological_orderings(1, 0.001)
 
 students = [Student(order, CDL.course_map) for order in orders]
 courses  = CDL.course_info
@@ -49,5 +46,6 @@ while not all([stu.is_finished for stu in students]):
         
     scheduler.increment_semester()
     scheduler.assign_classes()
+    input()
     
     print("\nNEW SEMESTER\n")

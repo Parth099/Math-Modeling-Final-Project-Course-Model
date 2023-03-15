@@ -26,11 +26,28 @@ class Scheduler:
 	def read_class_capacity(self, courses: Dict[int, Course]):
 		self.class_caps = {int_code: course.classsize for (int_code, course) in courses.items() }
 
-	def update_class_capacity(self, selected_class):
+	def update_class_capacity(self, selected_class: int):
+		"""Update the class capacities
+			This function is used to decrement class count by 1 to reserve a spot for a student. 
+
+		Args:
+			selected_class (int): numerical ID of the class you trying to effect
+
+		Raises:
+			KeyError: on invalid `selected_class`
+
+		Returns:
+			_type_: T/F on if the student was placed in the class
+		"""
+		
 		if selected_class not in self.class_caps:
 			raise KeyError(f'Tried to alter class capacity, key={selected_class} doesnt exist in dict')
 
-		self.class_caps[selected_class] -= 1 # one student is taking it
+		spaceLeft = self.class_caps[selected_class] > 0
+
+		if spaceLeft:
+			self.class_caps[selected_class] -= 1 # decrement to reserve a space
+		return spaceLeft
   
 	def student_can_take_class(self, student: Student, course: Course) -> bool:
 		"""returns T/F on whether a Student `student` can take a Course `course`
@@ -85,12 +102,14 @@ class Scheduler:
 				if stu.curr_credit_count >= Scheduler.CREDITS_THRESHOLD: break
  
 				# if class is possible, assign it
-				if self.student_can_take_class(stu, C): 
-					stu.assign_class(C)
+				if not self.student_can_take_class(stu, C): continue
 					
-					class_index = self.course_map.get(C.code, None)
-					
-					self.update_class_capacity(class_index)
+				# class is possible to assign so attempt to assign
+				class_index = self.course_map.get(C.code, None)
+
+				# assign to student if there is space left
+				if self.update_class_capacity(class_index):
+					stu.assign_class(C)  
 
 
 	def increment_semester(self):
