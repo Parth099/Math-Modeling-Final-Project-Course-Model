@@ -20,16 +20,17 @@ class Scheduler:
 		for name, int_mapping in course_map.items():
 			self.courses[int_mapping] = Courses.get(name)
 
-		self.class_caps = self.read_class_capacity(self.courses)
+		self.class_caps: Dict[int, int] = {}
+		self.read_class_capacity(self.courses)
 	
 	def read_class_capacity(self, courses: Dict[int, Course]):
-		return {int_code: course.classsize for (int_code, course) in courses.items() }
+		self.class_caps = {int_code: course.classsize for (int_code, course) in courses.items() }
 
-	def update_class_capacity(self, selected_class: int, capacities: Dict[int, int]):
-		if selected_class not in capacities:
-			raise KeyError("Tried to alter class capacity, class doesnt exist in dict")
+	def update_class_capacity(self, selected_class):
+		if selected_class not in self.class_caps:
+			raise KeyError(f'Tried to alter class capacity, key={selected_class} doesnt exist in dict')
 
-		capacities[selected_class] -= 1 # one student is taking it
+		self.class_caps[selected_class] -= 1 # one student is taking it
   
 	def student_can_take_class(self, student: Student, course: Course) -> bool:
 		"""returns T/F on whether a Student `student` can take a Course `course`
@@ -86,10 +87,17 @@ class Scheduler:
 				# if class is possible, assign it
 				if self.student_can_take_class(stu, C): 
 					stu.assign_class(C)
+					
+					class_index = self.course_map.get(C.code, None)
+					
+					self.update_class_capacity(class_index)
 
 
 	def increment_semester(self):
 		"""Move each student up a semester"""
 		for stu in self.students:
-			stu.increment_semester()
+			if not stu.is_finished: stu.increment_semester()
+		
+		# reset capacity
+		self.read_class_capacity(self.courses)
 			
