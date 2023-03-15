@@ -4,6 +4,7 @@ from Scheduling.Models.Course import Course
 from collections import defaultdict
 
 from numpy.random import normal
+from numpy import mean
 
 
 class Student:
@@ -11,6 +12,9 @@ class Student:
     
     student_count = 0
     FAILING_GRADE = 65
+    
+    DEFAULT_GRADE_MEAN = 80
+    DEFAULT_GRADE_SDEV = 10
     
     def __init__(self, course_plan: List[int], course_map: Dict[str, int]):
         
@@ -27,6 +31,7 @@ class Student:
         self.has_taken:  List[Course] = [] # can also be used as a history
         self.is_taking:  List[Course] = []  
         self.has_failed: DefaultDict[str, int] = defaultdict(int) # keeps count of number of failures WRT course
+        self.grades: DefaultDict[str, float] = defaultdict(int)     # keeps track of latest grades per course
         
         self.curr_credit_count = 0
         self.credit_count = 0
@@ -42,23 +47,38 @@ class Student:
     def update_finished_status(self):
         self.is_finished = len(self.has_taken) == len(self.course_map)
     
-    @staticmethod
-    def generate_grade(mu: float, sigma: float):
-        """generates a grade based on the normal distribution
+    def generate_grade(self, course: Course):
+        """generates a grade based on the normal distribution given a course\nA grade is generated using the history of the student
         Args:
-            mu (float): mean
-            sigma (float): stddev
+            course (Course)
+        Returns:
+            (float): generated Grades
+        """
+
+        mu = Student.DEFAULT_GRADE_MEAN;    
+        past_grades = self.get_grades_for_courses(course.prerequisites)
+        
+        if past_grades:
+            mu = mean(past_grades)
+        
+        return normal(mu, Student.DEFAULT_GRADE_SDEV)
+    
+    def get_grades_for_courses(self, courses: List[Course]):
+        """gets grades for class given a list of classes
+
+        Args:
+            courses (List[Course]): courses to retrive grades for
 
         Returns:
-            (float): _description_
+            List of grades (floats)
         """
-        return normal(mu, sigma)
+        return [self.grades[course.code] for course in courses]
     
     def increment_semester(self) -> None:
         """represents the end of a semester, this function assigns grades and places courses into correct categories: passed + failing"""
-        mu, sigma = 80, 10
+        
         for course in self.is_taking:
-            received_grade = Student.generate_grade(mu, sigma)
+            received_grade = self.generate_grade(course)
             
             if received_grade <= Student.FAILING_GRADE: self.has_failed[course.code] += 1
             else: 
@@ -68,13 +88,15 @@ class Student:
                 
                 # remove class from plan now that it is used
                 if passed_class in self.course_plan: self.course_plan.remove(passed_class)
+                
+            self.grades[course.code] = received_grade
             
         # empty out course list for this semester
         self.is_taking = []
         self.semester += 1
         self.credit_count += self.curr_credit_count  
         self.curr_credit_count = 0
-        
+
         # check if student has graduated
         self.update_finished_status()
         
