@@ -19,7 +19,17 @@ class Scheduler:
 		# create an int -> info map to be used later
 		for name, int_mapping in course_map.items():
 			self.courses[int_mapping] = Courses.get(name)
+
+		self.class_caps = self.read_class_capacity(self.courses)
 	
+	def read_class_capacity(self, courses: Dict[int, Course]):
+		return {int_code: course.classsize for (int_code, course) in courses.items() }
+
+	def update_class_capacity(self, selected_class: int, capacities: Dict[int, int]):
+		if selected_class not in capacities:
+			raise KeyError("Tried to alter class capacity, class doesnt exist in dict")
+
+		capacities[selected_class] -= 1 # one student is taking it
   
 	def student_can_take_class(self, student: Student, course: Course) -> bool:
 		"""returns T/F on whether a Student `student` can take a Course `course`
@@ -73,7 +83,8 @@ class Scheduler:
 				# if student has registered for enough classes, allow other students to register
 				if stu.curr_credit_count >= Scheduler.CREDITS_THRESHOLD: break
  
-				if self.student_can_take_class(stu, C):
+				# if class is possible, assign it
+				if self.student_can_take_class(stu, C): 
 					stu.assign_class(C)
 
 
