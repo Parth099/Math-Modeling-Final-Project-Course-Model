@@ -10,6 +10,8 @@ from GraphGeneration.DAGGenerator import DAGGenerator
 from Scheduling.Models.Student import Student
 from Scheduling.Scheduler import Scheduler
 
+from collections import defaultdict
+
 """
 Questions an this ABM can answer:
     1.  Given a course list of prereqs how long will students take to complete it?
@@ -26,13 +28,7 @@ COURSE_DATA_PATH = "./data/prereq.json"        # path to file to be load
 CDL = CourseDataLoader(COURSE_DATA_PATH)
 DAG = DAGGenerator(CDL.course_info, CDL.course_map)
 
-orders = DAG.generate_K_topological_orderings(2, 0.001)
-
-G = DAG.draw_graph_via_PYG(None)
-
-G.draw("./img/sample.png")
-
-exit()
+orders = DAG.generate_K_topological_orderings(70, 0.001)
 
 students = [Student(order, CDL.course_map) for order in orders]
 courses  = CDL.course_info
@@ -46,10 +42,17 @@ while not all([stu.is_finished for stu in students]):
     scheduler.assign_classes()
     
     
-for stu in scheduler.students:
-    for i, D in stu._history.items():
-        print(i, D)
-    print("\n\n")
-    
-print(scheduler.get_passing_and_failing_counts(0))
+for semester in range(scheduler.get_highest_semester()):
+    pass_count, fail_count = scheduler.get_passing_and_failing_counts(semester)
+    labels = defaultdict(str)
 
+    for key in pass_count:
+        labels[key] = f'Passed: {pass_count[key]}\nFailed: {fail_count[key]}'
+        
+        
+    DAG.draw_graph_via_PYG(labels).draw(f'./img/sample-{semester}.png')
+
+
+
+#G = DAG.draw_graph_via_PYG(labels)
+#G.draw("./img/sample.png")

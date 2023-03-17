@@ -6,11 +6,9 @@ import matplotlib.pyplot as plt
 from random import random as rand
 
 from Scheduling.Models.Course import Course
-from typing import Dict, List, Counter, Union
+from typing import Dict, List, DefaultDict, Union
 
 OrderingList = List[List[int]]
-PygGraph = Union[pyg.AGraph, None]
-
 
 class DAGGenerator():
 
@@ -22,8 +20,7 @@ class DAGGenerator():
         
         # generate empty graph
         self.G: nx.DiGraph = nx.DiGraph()
-        self.PYG_G: PygGraph = None
-        
+    
         # store given data
         self.course_info: Dict[str, Course] = course_info
 
@@ -61,19 +58,13 @@ class DAGGenerator():
         
         return fig, ax
 
-    def __re_generate_PYG_graph_from_internal_data(self, labels: Dict[str, str]):
-        """private method to generate a PYG model of the working graph
-        
-        returns a PYG graph object and caches it, subsequent calls will retreive this cached copy
-        """
-
-        # return copy if it exists
-        if self.PYG_G: return self.PYG_G
-        
+    def __re_generate_PYG_graph_from_internal_data(self, labels: DefaultDict[str, str]):
+        """private method to generate a PYG model of the working graph from already stored data
+        """        
         G = pyg.AGraph(directed=True)
         
         # add in all nodes
-        [G.add_node(course_name, xlabel=labels.get(course_name, "")) for course_name in self.course_info.keys()]
+        [G.add_node(course_name, label=f'{course_name}\n\n{labels[course_name]}') for course_name in self.course_info.keys()]
         
         # add in connections
         for course_name, course_info in self.course_info.items():
@@ -83,18 +74,17 @@ class DAGGenerator():
             for prereq in course_info.prerequisites:
                 G.add_edge(prereq.code, course_name)
                 
-        self.PYG_G = G
-        return self.PYG_G
+        return G
         
         
     
-    def draw_graph_via_PYG(self, d):
+    def draw_graph_via_PYG(self, labels: DefaultDict[str, str]):
         """Draw a graph from given data via pygraphviz
 
         Args:
             graph_labels (Dict[int, str]): labels on the graph's nodes
         """
-        G = self.__re_generate_PYG_graph_from_internal_data({})
+        G = self.__re_generate_PYG_graph_from_internal_data(labels)
         G.layout("dot")
         
         G.node_attr["shape"] = 'note'
