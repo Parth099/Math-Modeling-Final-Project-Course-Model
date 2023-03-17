@@ -28,6 +28,12 @@ DAG = DAGGenerator(CDL.course_info, CDL.course_map)
 
 orders = DAG.generate_K_topological_orderings(2, 0.001)
 
+G = DAG.draw_graph_via_PYG(None)
+
+G.draw("./img/sample.png")
+
+exit()
+
 students = [Student(order, CDL.course_map) for order in orders]
 courses  = CDL.course_info
 

@@ -1,4 +1,7 @@
+# for graph modeling
 import networkx as nx
+import pygraphviz as pyg
+
 import matplotlib.pyplot as plt
 from random import random as rand
 
@@ -20,7 +23,7 @@ class DAGGenerator():
 
         # add all the nodes first before adding connections
         node_values: list[int] = course_name_to_index.values()
-        [self.G.add_node(node, subset=node % DAGGenerator.NODES_PER_LAYER) for node in node_values]
+        [self.G.add_node(node, subset=node % DAGGenerator.NODES_PER_LAYER)  for node in node_values]
 
         # add connections
         for course, data in course_info.items():
@@ -38,7 +41,7 @@ class DAGGenerator():
                 # add connection
                 self.G.add_edge(source_node, destination_node)
 
-    def draw_graph(self, graph_labels: Dict[int, str]):
+    def draw_graph_via_PLT(self, graph_labels: Dict[int, str]):
         '''draws a graph given `graph_labels`'''
         
         fig, ax = plt.subplots()
@@ -51,6 +54,18 @@ class DAGGenerator():
                     ax=ax)
         
         return fig, ax
+    
+    def draw_graph_via_PYG(self, graph_labels: Dict[int, str]):
+        """Draw a graph from given data via pygraphviz
+
+        Args:
+            graph_labels (Dict[int, str]): labels on the graph's nodes
+        """
+        G = nx.nx_agraph.to_agraph(self.G)
+        G.layout("dot")
+
+        return G
+ 
     
     def generate_K_topological_orderings(self, K: int, ordering_acceptance_prob: float) -> OrderingList:
         """generates `k` topological_orderings of the initialized graph
