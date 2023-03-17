@@ -2,8 +2,9 @@ from Scheduling.Models.Course import Course
 from Scheduling.Models.Student import Student
 
 from random import shuffle
+from typing import List, Dict, Counter
 
-from typing import List, Dict
+from collections import Counter
 
 class Scheduler:
 	"""Scheduler takes steps WRT open courses and availble"""
@@ -120,4 +121,52 @@ class Scheduler:
 		# reset capacity
 		self.read_class_capacity(self.courses)
 		
-			
+	def get_highest_semester(self):
+		return max([stu.semester for stu in self.students], default=0)
+
+	def __get_semester_PF_counts(self, semester: int):
+		"""gets the students counts for passing and total students taking the class by `semester`
+
+		Args:
+			semester (int)
+
+		Returns:
+			2 Counter objects\n\n
+			(1) - passed students count by class name (str)\n
+			(2) - total students taking a class by class name (str)
+		"""
+		
+		Pass_count: Counter[str] = Counter()
+		class_sizes: Counter[str] = Counter()
+  
+		for stu in self.students:
+			semester_history = stu._history.get(semester, {})
+	
+			Pass_count.update(semester_history)
+			class_sizes.update(semester_history.keys())
+	
+		return Pass_count, class_sizes
+
+	def get_passing_and_failing_counts(self, semester: int):
+		"""gets the passing and failing counts for `semester` and returns them in two counter objects
+
+		Args:
+			semester (int): semester to get info for
+
+		Returns:
+			2 Counter objects\n\n
+			(1) - passed students count by class name (str)\n
+			(2) - failed students count by class name (str)
+		"""
+		# call helper to get the passed count and class sizes
+		pass_count, sizes = self.__get_semester_PF_counts(semester)
+  
+		fail_count: Counter[str] = Counter()
+
+		# use helper info (above) to get num failed
+		for course, num_currently_taking in sizes.items():
+			num_passed = pass_count.get(course, 0)
+			fail_count.update({course: num_currently_taking - num_passed})
+
+		return pass_count, fail_count
+  

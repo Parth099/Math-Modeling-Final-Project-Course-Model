@@ -19,7 +19,7 @@ class CourseDataLoader(JsonLoader):
 		self.course_info = self.jsonToCourse(self.data) 
 
 		# create graph labels and integer mappings
-		self.course_map, self.graph_labels = self.generateMetaDataFromCourseDict(self.course_info)
+		self.course_map, _ = self.generateMetaDataFromCourseDict(self.course_info)
 
 		
 	def jsonToCourse(self, json_data: list) -> Dict[str, Course]:

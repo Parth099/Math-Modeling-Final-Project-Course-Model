@@ -25,7 +25,7 @@ class Student:
         
         # boundary variables
         self.has_finished = False
-        self.semester = 1
+        self.semester = 0
     
 		# state to keep track of what classes student is taking/taken
         self.has_taken:  List[Course] = [] # can also be used as a history
@@ -42,7 +42,7 @@ class Student:
         
         # history (pass fail only)
         # map semester (into) to all courses taken that semester (str[]) with their P/F state
-        self.history: Dict[int, Dict[str, bool]] = {}
+        self._history: Dict[int, Dict[str, bool]] = {}
         
         
     def assign_class(self, course: Course):
@@ -98,20 +98,20 @@ class Student:
 
             else: self.has_failed[course.code] += 1
             
-            history_fragment[course.code] = hasPassed
+            history_fragment[course.code] = int(hasPassed)
             self.grades[course.code] = received_grade
             
         # history
-        self.history[self.semester] = history_fragment
+        self._history[self.semester] = history_fragment
             
         # empty out course list for this semester
         self.is_taking = []
-        self.semester += 1
         self.credit_count += self.curr_credit_count  
         self.curr_credit_count = 0
 
         # check if student has graduated
-        self.update_finished_status()
+        if not self.update_finished_status():
+            self.semester += 1        
     
         
         
