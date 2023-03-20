@@ -15,6 +15,11 @@ class DAGGenerator():
     # static vars
     NODE_COLOR = "#a41e35"
     NODES_PER_LAYER = 5
+    
+    # node shapes for pyg
+    NODE_SHAPE_BY_COURSETYPE = {"major": 'note', 'gened': "oval"}
+    NODE_SHAPE_DEFAULT = 'note'
+    
 
     def __init__(self, course_info: Dict[str, Course], course_name_to_index: Dict[str, int]):
         
@@ -64,7 +69,20 @@ class DAGGenerator():
         G = pyg.AGraph(directed=True)
         
         # add in all nodes
-        [G.add_node(course_name, label=f'{course_name}\n\n{labels[course_name]}') for course_name in self.course_info.keys()]
+        for course_name in self.course_info.keys():
+            
+            # obtain course type (major, gened, ...)
+            coursetype = self.course_info.get(course_name).coursetype
+            
+            # determine how to display its shape by coursetype
+            _shape = DAGGenerator.NODE_SHAPE_BY_COURSETYPE.get(coursetype, DAGGenerator.NODE_SHAPE_DEFAULT)
+            
+            # generate labels (pass-fail counts)
+            _label = f'{course_name}\n\n{labels[course_name]}'
+            
+            G.add_node(course_name, label=_label, shape=_shape)
+            
+        
         
         # add in connections
         for course_name, course_info in self.course_info.items():
@@ -87,9 +105,8 @@ class DAGGenerator():
         G = self.__re_generate_PYG_graph_from_internal_data(labels)
         G.layout("dot")
         
-        G.node_attr["shape"] = 'note'
-        G.graph_attr["bgcolor"] = 'white'
-        
+        G.node_attr["shape"]    = 'note'
+        G.node_attr["color"]    = "#a41e35"
         return G
  
     

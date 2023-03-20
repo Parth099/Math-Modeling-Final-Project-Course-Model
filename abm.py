@@ -33,23 +33,19 @@ courses  = CDL.course_info
 scheduler = Scheduler(courses, students, CDL.course_map)
 scheduler.assign_classes()
 
+# run semesters
 while not all([stu.is_finished for stu in students]):
-
     scheduler.increment_semester()
     scheduler.assign_classes()
     
-    
+# read semester data
 for semester in range(scheduler.get_highest_semester()):
     pass_count, fail_count = scheduler.get_passing_and_failing_counts(semester)
     labels = defaultdict(str)
 
     for key in pass_count:
-        labels[key] = f'Passed: {pass_count[key]}\nFailed: {fail_count[key]}'
+        _label = f'Passed: {pass_count[key]}\nFailed: {fail_count[key]}'
+        labels[key] = _label
         
         
     DAG.draw_graph_via_PYG(labels).draw(f'./img/sample-{semester}.png')
-
-
-
-#G = DAG.draw_graph_via_PYG(labels)
-#G.draw("./img/sample.png")
