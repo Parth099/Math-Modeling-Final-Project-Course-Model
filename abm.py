@@ -30,22 +30,25 @@ orders = DAG.generate_K_topological_orderings(70, 0.001)
 students = [Student(order, CDL.course_map) for order in orders]
 courses  = CDL.course_info
 
-scheduler = Scheduler(courses, students, CDL.course_map)
-scheduler.assign_classes()
+scheduler = Scheduler(students, courses, CDL.course_map)
+#scheduler.assign_classes()
+
+D = scheduler.generate_course_buckets()
+print(D)
 
 # run semesters
-while not all([stu.is_finished for stu in students]):
-    scheduler.increment_semester()
-    scheduler.assign_classes()
+# while not all([stu.is_finished for stu in students]):
+#    scheduler.increment_semester()
+#    scheduler.assign_classes()
     
 # read semester data
-for semester in range(scheduler.get_highest_semester()):
-    pass_count, fail_count = scheduler.get_passing_and_failing_counts(semester)
-    labels = defaultdict(str)
+#for semester in range(scheduler.get_highest_semester()):
+#    pass_count, fail_count = scheduler.get_passing_and_failing_counts(semester)
+#    labels = defaultdict(str)
 
-    for key in pass_count:
-        _label = f'Passed: {pass_count[key]}\nFailed: {fail_count[key]}'
-        labels[key] = _label
+#    for key in pass_count:
+#        _label = f'Passed: {pass_count[key]}\nFailed: {fail_count[key]}'
+#        labels[key] = _label
         
         
-    DAG.draw_graph_via_PYG(labels).draw(f'./img/sample-{semester}.png')
+#    DAG.draw_graph_via_PYG(labels).draw(f'./img/sample-{semester}.png')
