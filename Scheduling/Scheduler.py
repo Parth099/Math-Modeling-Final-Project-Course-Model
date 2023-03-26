@@ -68,6 +68,12 @@ class Scheduler:
         return spaceLeft
 
     #! NEED TO ALTER THIS TO WORK WITH REQUIREMENTS
+    #? Note to self
+    #? Use a count to see if a student can take a class
+    #? if the meet a requirement add the number of classes in the requirement to the count
+    #? if this combined with prereqs meets the total required classes in prereqs allow them to take the class
+
+    #? alternate method is to create a course to requirement mapping 
     def student_can_take_class(self, student: Student, course: Course) -> bool:
         """returns T/F on whether a Student `student` can take a Course `course`
 
@@ -96,8 +102,12 @@ class Scheduler:
         # map each item to a number
         prereqs_int = [self.course_map[prereq.code] for prereq in prereqs]
 
-        # if each of the numbers in prereqs appears in completed_classes, this student can take that class
-        return all([class_num in completed_classes_int for class_num in prereqs_int])
+
+        if not course.requirements:
+            # if each of the numbers in prereqs appears in completed_classes, this student can take that class
+            return all([class_num in completed_classes_int for class_num in prereqs_int])
+        else: 
+            return True #! needs fix
 
     def assign_classes(self):
         """select class based on availble classes"""
