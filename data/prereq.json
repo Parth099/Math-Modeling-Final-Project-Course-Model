@@ -1,4 +1,7 @@
 {
+    "requirements": {
+        "major - intro": 1
+    },
     "courses": [
         {
             "code": "ENG0802",
@@ -6,7 +9,8 @@
             "creditno": 4,
             "classsize": 40,
             "prerequisites": [],
-            "coursetype": "gened_gen"
+            "coursetype": "gened_gen",
+            "requirements": []
         },
         {
             "code": "GENED Art",
@@ -14,7 +18,8 @@
             "creditno": 3,
             "classsize": 40,
             "prerequisites": [],
-            "coursetype": "gened_art"
+            "coursetype": "gened_art",
+            "requirements": []
         },
         {
             "code": "GENED Sci",
@@ -22,7 +27,8 @@
             "creditno": 3,
             "classsize": 40,
             "prerequisites": [],
-            "coursetype": "gened_sci"
+            "coursetype": "gened_sci",
+            "requirements": []
         },
         {
             "code": "GENED Psych",
@@ -30,7 +36,8 @@
             "creditno": 3,
             "classsize": 40,
             "prerequisites": [],
-            "coursetype": "gened_human"
+            "coursetype": "gened_human",
+            "requirements": []
         },
         {
             "code": "GENED Hist",
@@ -38,7 +45,8 @@
             "creditno": 3,
             "classsize": 40,
             "prerequisites": [],
-            "coursetype": "gened_hist"
+            "coursetype": "gened_hist",
+            "requirements": []
         },
         {
             "code": "SCTC1001",
@@ -46,7 +54,8 @@
             "creditno": 1,
             "classsize": 40,
             "prerequisites": [],
-            "coursetype": "major"
+            "coursetype": "major",
+            "requirements": []
         },
         {
             "code": "CIS1051",
@@ -54,7 +63,8 @@
             "creditno": 4,
             "classsize": 40,
             "prerequisites": [],
-            "coursetype": "major - intro"
+            "coursetype": "major - intro",
+            "requirements": []
         },
         {
             "code": "CIS1057",
@@ -62,7 +72,8 @@
             "creditno": 4,
             "classsize": 40,
             "prerequisites": [],
-            "coursetype": "major - intro"
+            "coursetype": "major - intro",
+            "requirements": []
         },
         {
             "code": "CIS1001",
@@ -70,7 +81,8 @@
             "creditno": 1,
             "classsize": 40,
             "prerequisites": [],
-            "coursetype": "major"
+            "coursetype": "major",
+            "requirements": []
         },
         {
             "code": "MATH1041",
@@ -78,7 +90,8 @@
             "creditno": 4,
             "classsize": 40,
             "prerequisites": [],
-            "coursetype": "major"
+            "coursetype": "major",
+            "requirements": []
         },
         {
             "code": "CIS1166",
@@ -86,7 +99,8 @@
             "creditno": 4,
             "classsize": 40,
             "prerequisites": [],
-            "coursetype": "major"
+            "coursetype": "major",
+            "requirements": []
         },
         {
             "code": "MATH1042",
@@ -94,14 +108,16 @@
             "creditno": 4,
             "classsize": 40,
             "prerequisites": ["MATH1041"],
-            "coursetype": "major"
+            "coursetype": "major",
+            "requirements": []
         },
         {
             "code": "CIS1068",
             "name": "Program Design and Abstraction",
             "creditno": 4,
             "classsize": 40,
-            "prerequisites": ["CIS1051"],
+            "prerequisites": ["CIS1051", "CIS1057"],
+            "requirements": [],
             "coursetype": "major"
         },
         {
@@ -110,7 +126,8 @@
             "creditno": 4,
             "classsize": 40,
             "prerequisites": ["CIS1068", "MATH1041", "CIS1166"],
-            "coursetype": "major"
+            "coursetype": "major",
+            "requirements": []
         },
         {
             "code": "CIS2107",
@@ -118,7 +135,8 @@
             "creditno": 4,
             "classsize": 40,
             "prerequisites": ["CIS1068"],
-            "coursetype": "major"
+            "coursetype": "major",
+            "requirements": []
         },
         {
             "code": "CIS2033",
@@ -126,7 +144,8 @@
             "creditno": 3,
             "classsize": 40,
             "prerequisites": ["MATH1042", "CIS1068"],
-            "coursetype": "major"
+            "coursetype": "major",
+            "requirements": []
         },
         {
             "code": "CIS2166",
@@ -134,7 +153,8 @@
             "creditno": 4,
             "classsize": 40,
             "prerequisites": ["CIS1166", "MATH1042"],
-            "coursetype": "major"
+            "coursetype": "major",
+            "requirements": []
         },
         {
             "code": "CIS3207",
@@ -142,7 +162,8 @@
             "creditno": 4,
             "classsize": 40,
             "prerequisites": ["CIS2107", "CIS2168", "CIS1166"],
-            "coursetype": "major"
+            "coursetype": "major",
+            "requirements": []
         },
         {
             "code": "CIS3223",
@@ -150,7 +171,8 @@
             "creditno": 4,
             "classsize": 40,
             "prerequisites": ["CIS2166", "CIS2168", "MATH1042", "CIS2033"],
-            "coursetype": "major"
+            "coursetype": "major",
+            "requirements": []
         },
         {
             "code": "CIS3296",
@@ -158,7 +180,8 @@
             "creditno": 4,
             "classsize": 40,
             "prerequisites": ["CIS3207", "CIS2168"],
-            "coursetype": "major"
+            "coursetype": "major",
+            "requirements": []
         },
         {
             "code": "CIS4398",
@@ -166,7 +189,8 @@
             "creditno": 4,
             "classsize": 40,
             "prerequisites": ["CIS3296", "CIS3223"],
-            "coursetype": "major"
+            "coursetype": "major",
+            "requirements": []
         }
     ]
 }

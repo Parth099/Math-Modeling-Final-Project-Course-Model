@@ -1,7 +1,7 @@
 from Scheduling.Models.Course import Course
 from Scheduling.Models.Student import Student
 
-from random import shuffle
+from random import shuffle, choice, sample
 from typing import List, Dict, Counter
 
 from collections import Counter
@@ -12,10 +12,11 @@ class Scheduler:
 
     CREDITS_THRESHOLD = 14
 
-    def __init__(self, Students: List[Student], Courses: Dict[str, Course], course_map: Dict[str, int]) -> None:
+    def __init__(self, Students: List[Student], Courses: Dict[str, Course], course_map: Dict[str, int], requirements: Dict[str, int]) -> None:
         self.students = Students
         self.course_map = course_map
         self.__courses = Courses
+        self.requirements = requirements
 
         # int -> Course Map
         self.courses: Dict[int, Course] = {}
@@ -30,6 +31,12 @@ class Scheduler:
 
         # generate requirement layout
         self.buckets = self.__generate_course_buckets()
+
+        # validate bucket information
+        self.__validate_courses_with_requirements(self.buckets, self.requirements)
+
+        # assign students their classes
+        self.__assign_course_plans(self.students)
 
     def read_class_capacity(self, courses: Dict[int, Course]):
         self.__class_caps = {int_code: course.classsize for (
@@ -60,6 +67,7 @@ class Scheduler:
             self.__class_caps[selected_class] -= 1
         return spaceLeft
 
+    #! NEED TO ALTER THIS TO WORK WITH REQUIREMENTS
     def student_can_take_class(self, student: Student, course: Course) -> bool:
         """returns T/F on whether a Student `student` can take a Course `course`
 
@@ -208,3 +216,56 @@ class Scheduler:
             buckets[key] = bucket
 
         return buckets
+
+    def __validate_courses_with_requirements(self, buckets: Dict[str, List[Course]], requirements: Dict[str, int]):
+        """validates bucket information against requirements present
+
+                Raises:
+                        ValueError: on invalid config
+                """
+        for requirement, num_required_classes in requirements.items():
+
+            # if a requirement isnt even present or the number of classes isnt correct
+            if requirement not in buckets or len(buckets[requirement]) < num_required_classes:
+                raise ValueError(
+                    f'Num required of coursetype={requirement} not possible, more required then present\n'
+                    f'Num required: {num_required_classes}, Num Present: {len(buckets.get(requirement, []))}')
+
+    def __assign_course_plans(self, Students: List[Student]):
+        for student in Students:
+            # given a set of courses not all are required, thus method below selects classes required to graduate
+            generated_courses = self.__create_course_plan(self.buckets, self.requirements)
+
+            # this randomizes the classes give each student a course map they have some desire to take
+            shuffle(generated_courses)
+            student.course_plan = generated_courses
+        
+
+    def __create_course_plan(self, buckets: Dict[str, List[Course]], requirements: Dict[str, int]):
+        """create course plan based on course layout that meets all `requirements`. A `requirement` wih no bucket
+        is assumed to be required. 
+
+        Args:
+            buckets (Dict[str, List[Course]]): courses sorted by coursetype
+            requirements (Dict[str, int]): requirements in terms of classes per bucket label (coursetype)
+
+        Returns:
+            List[int]: classes to be taken
+        """
+
+        ordering:List[Course] = []
+
+        for bucket_name, classes in buckets.items():
+
+            if bucket_name in requirements:
+                randomly_selected_classes = sample(classes, requirements[bucket_name])
+
+                # save selected classes that filfil requirements
+                ordering += randomly_selected_classes
+
+                # if there are no requirements, that course bucket needs to be entirely completed
+            else:
+                ordering += classes
+
+        # remap to integer to later use
+        return [self.course_map[course.code] for course in ordering]

@@ -16,7 +16,7 @@ class Student:
     DEFAULT_GRADE_MEAN = 80
     DEFAULT_GRADE_SDEV = 10
     
-    def __init__(self, course_plan: List[int], course_map: Dict[str, int]):
+    def __init__(self, course_map: Dict[str, int], course_plan: List[int] = []):
         
         # constants
         self.course_plan = course_plan

@@ -1,13 +1,13 @@
-import sys, os
-sys.path.insert(0, os.getcwd()) # add this module to $path to allow python to find it later
-
-from dataloader.CourseLoader import CourseDataLoader
-from GraphGeneration.DAGGenerator import DAGGenerator
-
-from Scheduling.Models.Student import Student
-from Scheduling.Scheduler import Scheduler
-
 from collections import defaultdict
+from Scheduling.Scheduler import Scheduler
+from Scheduling.Models.Student import Student
+from GraphGeneration.DAGGenerator import DAGGenerator
+from dataloader.CourseLoader import CourseDataLoader
+import sys
+import os
+# add this module to $path to allow python to find it later
+sys.path.insert(0, os.getcwd())
+
 
 """
 Questions an this ABM can answer:
@@ -25,30 +25,31 @@ COURSE_DATA_PATH = "./data/prereq.json"        # path to file to be load
 CDL = CourseDataLoader(COURSE_DATA_PATH)
 DAG = DAGGenerator(CDL.course_info, CDL.course_map)
 
-orders = DAG.generate_K_topological_orderings(70, 0.001)
+students = [Student(CDL.course_map) for _ in range(1)]
+courses = CDL.course_info
 
-students = [Student(order, CDL.course_map) for order in orders]
-courses  = CDL.course_info
-
-scheduler = Scheduler(students, courses, CDL.course_map)
-#scheduler.assign_classes()
-
-D = scheduler.generate_course_buckets()
-print(D)
+scheduler = Scheduler(students, courses, CDL.course_map, CDL.grad_reqs)
+S = scheduler.students[0]
+print(S.course_plan)
 
 # run semesters
-# while not all([stu.is_finished for stu in students]):
-#    scheduler.increment_semester()
-#    scheduler.assign_classes()
-    
-# read semester data
-#for semester in range(scheduler.get_highest_semester()):
-#    pass_count, fail_count = scheduler.get_passing_and_failing_counts(semester)
-#    labels = defaultdict(str)
+while not all([stu.is_finished for stu in students]):
+    scheduler.increment_semester()
+    scheduler.assign_classes()
+    print(S.course_plan)
+    print(S.is_taking)
+    print(S.has_taken)
+    print(S.curr_credit_count)
+    input()
 
-#    for key in pass_count:
-#        _label = f'Passed: {pass_count[key]}\nFailed: {fail_count[key]}'
-#        labels[key] = _label
-        
-        
-#    DAG.draw_graph_via_PYG(labels).draw(f'./img/sample-{semester}.png')
+# read semester data
+for semester in range(scheduler.get_highest_semester()):
+    pass_count, fail_count = scheduler.get_passing_and_failing_counts(semester)
+    labels = defaultdict(str)
+
+    for key in pass_count:
+        _label = f'Passed: {pass_count[key]}\nFailed: {fail_count[key]}'
+        labels[key] = _label
+
+
+    DAG.draw_graph_via_PYG(labels).draw(f'./img/sample-{semester}.png')

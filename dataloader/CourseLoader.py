@@ -3,6 +3,7 @@ from typing import Dict
 
 from Scheduling.Models.Course import Course
 
+
 class CourseDataLoader(JsonLoader):
     """object that loads in course data based on a json object"""
 
@@ -17,6 +18,9 @@ class CourseDataLoader(JsonLoader):
         # take data and serialize it
         # this variable maps name of course to all of its information
         self.__course_json_data = self.data['courses']
+        self.grad_reqs = self.data['requirements']
+
+        # take json info to its python class
         self.course_info = self.jsonToCourse(self.__course_json_data)
 
         # create graph labels and integer mappings
@@ -36,10 +40,10 @@ class CourseDataLoader(JsonLoader):
             creditno = course['creditno']
             classsize = course['classsize']
             coursetype = course['coursetype']
+            requirements = course['requirements']
 
             # add finished course to cache
-            course_dict[code] = Course(
-                code, name, classsize, creditno, coursetype, [])
+            course_dict[code] = Course(code, name, classsize, creditno, coursetype, [])
 
         # load in course prereqs
         for course in json_data:
