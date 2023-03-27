@@ -23,3 +23,10 @@ class Course:
     
     def __repr__(self) -> str:
         return self.__str__()
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(object, Course): return False
+        
+        # at this point it has to be a <Course> object
+        return self.code == other.code
+

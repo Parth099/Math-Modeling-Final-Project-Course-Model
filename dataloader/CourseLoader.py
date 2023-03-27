@@ -43,7 +43,7 @@ class CourseDataLoader(JsonLoader):
             requirements = course['requirements']
 
             # add finished course to cache
-            course_dict[code] = Course(code, name, classsize, creditno, coursetype, [])
+            course_dict[code] = Course(code, name, classsize, creditno, coursetype, [], requirements)
 
         # load in course prereqs
         for course in json_data:

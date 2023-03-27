@@ -117,7 +117,7 @@
             "creditno": 4,
             "classsize": 40,
             "prerequisites": ["CIS1051", "CIS1057"],
-            "requirements": [],
+            "requirements": ["major - intro"],
             "coursetype": "major"
         },
         {

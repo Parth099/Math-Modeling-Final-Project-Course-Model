@@ -84,31 +84,41 @@ class Scheduler:
         Returns:
                 bool
         """
+        def has_prereqs_met(prereqs: List[Course]):
+            if not prereqs: return True
 
-        # approved if no prerequisites exist
-        if not course.prerequisites:
-            return True
+            # check if all prereqs are a subset of student.has_taken
+            return all(course in student.has_taken for course in prereqs)
 
-        # read in all classes a student has taken
-        completed_classes = student.has_taken
+        def has_requirements_met():
+            
+            # load in requirements
+            requirements = course.requirements
+            prereqs = course.prerequisites
 
-        # make each class to its integer representation
-        completed_classes_int = [self.course_map[_course.code]
-                                 for _course in completed_classes]
+            if not requirements: return True, prereqs
 
-        # get into prereqs
-        prereqs = course.prerequisites
+            # read in all classes a student has taken
+            completed_classes = student.has_taken
 
-        # map each item to a number
-        prereqs_int = [self.course_map[prereq.code] for prereq in prereqs]
+            for req in requirements:
+                bucket = self.buckets[req]
 
+                # generator expression to utlize short circuting
+                if any(course in completed_classes for course in bucket):
+                    prereqs = [prereq for prereq in prereqs if prereq not in bucket]
+                    continue
+                # false return if we ever bypass the continue meaning the requirement has not been met
+                return False, None
+                
+            return True, prereqs
 
-        if not course.requirements:
-            # if each of the numbers in prereqs appears in completed_classes, this student can take that class
-            return all([class_num in completed_classes_int for class_num in prereqs_int])
-        else: 
-            return True #! needs fix
+        # returns if requirements have been met and filters down the prereq list based on what reqirememts meet which prereqs
+        has_met_requirements, filtered_prereq_list = has_requirements_met()
 
+        return has_met_requirements and has_prereqs_met(filtered_prereq_list)
+            
+            
     def assign_classes(self):
         """select class based on availble classes"""
 

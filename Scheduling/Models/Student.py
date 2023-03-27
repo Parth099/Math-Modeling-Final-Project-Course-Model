@@ -31,7 +31,7 @@ class Student:
         self.has_taken:  List[Course] = [] # can also be used as a history
         self.is_taking:  List[Course] = []  
         self.has_failed: DefaultDict[str, int] = defaultdict(int) # keeps count of number of failures WRT course
-        self.grades: DefaultDict[str, float] = defaultdict(int)     # keeps track of latest grades per course
+        self.grades: Dict[str, float] = {}     # keeps track of latest grades per course
         
         self.curr_credit_count = 0
         self.credit_count = 0
@@ -50,7 +50,7 @@ class Student:
         self.curr_credit_count += course.creditno
     
     def update_finished_status(self):
-        self.is_finished = len(self.has_taken) == len(self.course_map)
+        self.is_finished = len(self.course_plan) == 0 # no classes left to take!
     
     def generate_grade(self, course: Course):
         """generates a grade based on the normal distribution given a course\nA grade is generated using the history of the student
@@ -77,14 +77,13 @@ class Student:
         Returns:
             List of grades (floats)
         """
-        return [self.grades[course.code] for course in courses]
+        return [self.grades[course.code] for course in courses if course.code in self.grades]
     
     def increment_semester(self) -> None:
         """represents the end of a semester, this function assigns grades and places courses into correct categories: passed + failing"""
         
         # history fragment keeps history of this semster
         history_fragment: Dict[str, bool] = {}
-        
         for course in self.is_taking:
             received_grade = self.generate_grade(course)
             hasPassed = received_grade > Student.FAILING_GRADE
@@ -112,7 +111,6 @@ class Student:
         # check if student has graduated
         if not self.update_finished_status():
             self.semester += 1        
-    
         
         
     
