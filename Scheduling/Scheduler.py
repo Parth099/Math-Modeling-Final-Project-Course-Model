@@ -33,14 +33,13 @@ class Scheduler:
         self.buckets = self.__generate_course_buckets()
 
         # validate bucket information
-        self.__validate_courses_with_requirements(self.buckets, self.requirements)
+        self.__validate_courses_with_requirements(self.requirements, self.buckets)
 
         # assign students their classes
         self.__assign_course_plans(self.students)
 
     def read_class_capacity(self, courses: Dict[int, Course]):
-        self.__class_caps = {int_code: course.classsize for (
-            int_code, course) in courses.items()}
+        self.__class_caps = {int_code: course.classsize for (int_code, course) in courses.items()}
 
     def update_class_capacity(self, selected_class: int):
         """Update the class capacities
@@ -237,7 +236,7 @@ class Scheduler:
 
         return buckets
 
-    def __validate_courses_with_requirements(self, buckets: Dict[str, List[Course]], requirements: Dict[str, int]):
+    def __validate_courses_with_requirements(self, requirements: Dict[str, int], buckets: Dict[str, List[Course]]):
         """validates bucket information against requirements present
 
                 Raises:
@@ -252,6 +251,11 @@ class Scheduler:
                     f'Num required: {num_required_classes}, Num Present: {len(buckets.get(requirement, []))}')
 
     def __assign_course_plans(self, Students: List[Student]):
+        """Attaches a course plan to a student based on a the requirements of a major
+
+        Args:
+            Students (List[Student])
+        """
         for student in Students:
             # given a set of courses not all are required, thus method below selects classes required to graduate
             generated_courses = self.__create_course_plan(self.buckets, self.requirements)
@@ -277,14 +281,16 @@ class Scheduler:
 
         for bucket_name, classes in buckets.items():
 
+            # if the bucket name corresponds to a requirement only add in the number of courses required
             if bucket_name in requirements:
                 randomly_selected_classes = sample(classes, requirements[bucket_name])
 
                 # save selected classes that filfil requirements
                 ordering += randomly_selected_classes
 
-                # if there are no requirements, that course bucket needs to be entirely completed
+                # if there are no requirements, that course bucket needs to be entirely completed            
             else:
+                # else add in all courses
                 ordering += classes
 
         # remap to integer to later use

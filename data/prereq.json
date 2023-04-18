@@ -1,6 +1,7 @@
 {
     "requirements": {
-        "major - intro": 1
+        "major - intro": 1,
+        "major - electives": 3
     },
     "courses": [
         {
@@ -191,6 +192,33 @@
             "prerequisites": ["CIS3296", "CIS3223"],
             "coursetype": "major",
             "requirements": []
+        },
+        {
+            "code": "MATH2043",
+            "name": "Calculus III",
+            "creditno": 4,
+            "classsize": 40,
+            "prerequisites": ["MATH1042"],
+            "coursetype": "major - electives",
+            "requirements": []
+        },
+        {
+            "code": "MATH2101",
+            "name": "Linear Algebra",
+            "creditno": 3,
+            "classsize": 40,
+            "prerequisites": ["MATH1042"],
+            "coursetype": "major - electives",
+            "requirements": []
+        },
+        {
+            "code": "CIS4526",
+            "name": "Foundations of Machine Learning",
+            "creditno": 3,
+            "classsize": 40,
+            "prerequisites": ["MATH2043", "CIS2166", "CIS2033", "CIS1051", "CIS1057"],
+            "coursetype": "major - electives",
+            "requirements": ["major - intro"]
         }
     ]
 }

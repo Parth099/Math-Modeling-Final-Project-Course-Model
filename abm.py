@@ -25,7 +25,7 @@ COURSE_DATA_PATH = "./data/prereq.json"        # path to file to be load
 CDL = CourseDataLoader(COURSE_DATA_PATH)
 DAG = DAGGenerator(CDL.course_info, CDL.course_map)
 
-students = [Student(CDL.course_map) for _ in range(2000)]
+students = [Student(CDL.course_map) for _ in range(100)]
 courses = CDL.course_info
 
 scheduler = Scheduler(students, courses, CDL.course_map, CDL.grad_reqs)
