@@ -25,21 +25,15 @@ COURSE_DATA_PATH = "./data/prereq.json"        # path to file to be load
 CDL = CourseDataLoader(COURSE_DATA_PATH)
 DAG = DAGGenerator(CDL.course_info, CDL.course_map)
 
-students = [Student(CDL.course_map) for _ in range(1)]
+students = [Student(CDL.course_map) for _ in range(2000)]
 courses = CDL.course_info
 
 scheduler = Scheduler(students, courses, CDL.course_map, CDL.grad_reqs)
-
-S = students[0]
 
 # run semesters
 while not all([stu.is_finished for stu in students]):
     scheduler.assign_classes()
     scheduler.increment_semester()
-    
-    print(S.has_taken)
-    print(S.course_plan)
-    input()
 
 # read semester data
 for semester in range(scheduler.get_highest_semester()):

@@ -1,7 +1,7 @@
 from Scheduling.Models.Course import Course
 from Scheduling.Models.Student import Student
 
-from random import shuffle, choice, sample
+from random import shuffle, randint, sample
 from typing import List, Dict, Counter
 
 from collections import Counter
@@ -283,10 +283,18 @@ class Scheduler:
 
             # if the bucket name corresponds to a requirement only add in the number of courses required
             if bucket_name in requirements:
-                randomly_selected_classes = sample(classes, requirements[bucket_name])
+                # generate a random number of items to select from this bucket based on its min and max values
+                #   min = required amount, max = all possible items
+                num_to_select = randint(requirements[bucket_name], len(classes))
+                randomly_selected_classes = sample(classes, num_to_select)
 
                 # save selected classes that filfil requirements
                 ordering += randomly_selected_classes
+
+                # add in relavent prereqs if needed
+                for rand_classes in randomly_selected_classes:
+                    for prereq in rand_classes.prerequisites:
+                        if prereq not in ordering: ordering.append(prereq)
 
                 # if there are no requirements, that course bucket needs to be entirely completed            
             else:
