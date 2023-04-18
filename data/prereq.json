@@ -216,9 +216,36 @@
             "name": "Foundations of Machine Learning",
             "creditno": 3,
             "classsize": 40,
-            "prerequisites": ["MATH2043", "CIS2166", "CIS2033", "CIS1051", "CIS1057"],
+            "prerequisites": ["MATH2043", "CIS2166", "CIS2033"],
             "coursetype": "major - electives",
             "requirements": ["major - intro"]
+        },
+        {
+            "code": "CIS3308",
+            "name": "Web Application Programming",
+            "creditno": 4,
+            "classsize": 40,
+            "prerequisites": ["CIS2107", "CIS2168"],
+            "coursetype": "major - electives",
+            "requirements": []
+        },
+        {
+            "code": "CIS4305",
+            "name": "Real Time Computer Systems",
+            "creditno": 4,
+            "classsize": 40,
+            "prerequisites": ["CIS3207", "CIS3223"],
+            "coursetype": "major - electives",
+            "requirements": []
+        },
+        {
+            "code": "CIS4317",
+            "name": "Data-Intensive and Cloud Computing",
+            "creditno": 3,
+            "classsize": 40,
+            "prerequisites": ["CIS2168", "CIS2166"],
+            "coursetype": "major - electives",
+            "requirements": []
         }
     ]
 }

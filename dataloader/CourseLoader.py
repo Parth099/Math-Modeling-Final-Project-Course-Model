@@ -1,5 +1,7 @@
+from collections import defaultdict
+
 from dataloader.JsonLoader import JsonLoader
-from typing import Dict
+from typing import Dict, DefaultDict, List, Set
 
 from Scheduling.Models.Course import Course
 
@@ -31,6 +33,7 @@ class CourseDataLoader(JsonLoader):
         """take a json file and turn it into a dict based on the outermost key where each value is a (cached) Course Object"""
 
         course_dict: dict[str, Course] = {}
+        course_type_dict: DefaultDict[str, List[Course]] = defaultdict(list)
 
         # preload courses so prereqs can be loaded
         for course in json_data:
@@ -45,14 +48,31 @@ class CourseDataLoader(JsonLoader):
             # add finished course to cache
             course_dict[code] = Course(code, name, classsize, creditno, coursetype, [], requirements)
 
-        # load in course prereqs
+            # add course to a cache that sorts by coursetype
+            course_type_dict[coursetype].append(course_dict[code])
+
+        # load in course prereqs and merge requirements
         for course in json_data:
             code = course['code']
             Current_Course = course_dict[code]
 
+            # insert prereqs
             for prereq_code in course['prerequisites']:
-                CachedClass = course_dict[prereq_code]
-                Current_Course.prerequisites.append(CachedClass)
+                Cached_Class = course_dict[prereq_code]
+                Current_Course.prerequisites.append(Cached_Class)
+
+            # merge requirements and mask them as prereqs
+            req_list: List[Course] = []
+            for req in Current_Course.requirements:
+                # collect all required classes
+                req_list += course_type_dict[req]
+
+            # shake off non unique elements
+            req_set: Set[Course] = set(req_list)
+            
+            # push to prereqs
+            for req in req_set:
+                Current_Course.prerequisites.append(req)
 
         # return the cache
         return course_dict

@@ -30,3 +30,5 @@ class Course:
         # at this point it has to be a <Course> object
         return self.code == other.code
 
+    def __hash__(self) -> int:
+        return hash(self.code)
