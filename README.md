@@ -10,7 +10,7 @@ If this item is not included it can be generated via:
 
 ```shell
 pip install pipreqsnb
-pipreqsnb .
+pipreqsnb . --force
 ```
 
 ### Install Guide

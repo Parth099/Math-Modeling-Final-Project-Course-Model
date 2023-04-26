@@ -66,13 +66,6 @@ class Scheduler:
             self.__class_caps[selected_class] -= 1
         return spaceLeft
 
-    #! NEED TO ALTER THIS TO WORK WITH REQUIREMENTS
-    #? Note to self
-    #? Use a count to see if a student can take a class
-    #? if the meet a requirement add the number of classes in the requirement to the count
-    #? if this combined with prereqs meets the total required classes in prereqs allow them to take the class
-
-    #? alternate method is to create a course to requirement mapping 
     def student_can_take_class(self, student: Student, course: Course) -> bool:
         """returns T/F on whether a Student `student` can take a Course `course`
 
@@ -299,6 +292,7 @@ class Scheduler:
                 # if there are no requirements, that course bucket needs to be entirely completed            
             else:
                 # else add in all courses
+                # this is where all 'major' classes get added to the requirement system
                 ordering += classes
 
         # remap to integer to later use
