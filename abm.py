@@ -76,7 +76,7 @@ class CourseABM():
         semester_counts = [stu.semester for stu in self.students]
 
         # make bins discreet to help with charts
-        bins = np.arange(6-0.5, np.max(semester_counts)+4-0.5, 1)
+        bins = np.arange(6-0.5, np.max(semester_counts)+3-0.5, 1)
         plt.hist(semester_counts, bins=bins, edgecolor="black")
 
         # save to destination
@@ -87,3 +87,7 @@ ABM = CourseABM("./data/prereq.json", 150)
 ABM.run()
 ABM.gen_graphs()
 ABM.gen_semester_dist()
+
+# behaviors
+#   grad semester WRT grading averages and STD dist
+#   random grading vs behavior based grading
