@@ -70,16 +70,20 @@ class CourseABM():
                 labels[key] = _label
 
 
-            self.DAG.draw_graph_via_PYG(labels).draw(f'./img/sample-{semester}.png')
+            self.DAG.draw_graph_via_PYG(labels, f'Semeter {semester}').draw(f'./img/sample-{semester}.png')
 
     def gen_semester_dist(self):
         semester_counts = [stu.semester for stu in self.students]
-        bins = np.arange(4-0.5, np.max(semester_counts)+4-0.5, 1)
-        plt.hist(semester_counts, bins=bins)
+
+        # make bins discreet to help with charts
+        bins = np.arange(6-0.5, np.max(semester_counts)+4-0.5, 1)
+        plt.hist(semester_counts, bins=bins, edgecolor="black")
+
+        # save to destination
         plt.savefig("./img/sem-hist.png")
         
 
-ABM = CourseABM("./data/prereq.json", 100)
+ABM = CourseABM("./data/prereq.json", 150)
 ABM.run()
-#ABM.gen_graphs()
+ABM.gen_graphs()
 ABM.gen_semester_dist()

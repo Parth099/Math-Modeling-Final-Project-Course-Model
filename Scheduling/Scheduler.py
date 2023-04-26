@@ -159,6 +159,7 @@ class Scheduler:
 
         # reset capacity
         self.read_class_capacity(self.courses)
+        self.semesterDT += 1
 
     def get_highest_semester(self):
         return max([stu.semester for stu in self.students], default=0)

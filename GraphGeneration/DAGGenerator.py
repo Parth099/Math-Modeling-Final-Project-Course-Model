@@ -66,7 +66,7 @@ class DAGGenerator():
     def __re_generate_PYG_graph_from_internal_data(self, labels: DefaultDict[str, str]):
         """private method to generate a PYG model of the working graph from already stored data
         """        
-        G = pyg.AGraph(directed=True)
+        G = pyg.AGraph(directed=True, prog="dot")
         
         # add in all nodes
         for course_name in self.course_info.keys():
@@ -96,7 +96,7 @@ class DAGGenerator():
         
         
     
-    def draw_graph_via_PYG(self, labels: DefaultDict[str, str]):
+    def draw_graph_via_PYG(self, labels: DefaultDict[str, str], title: str):
         """Draw a graph from given data via pygraphviz
 
         Args:
@@ -104,6 +104,8 @@ class DAGGenerator():
         """
         G = self.__re_generate_PYG_graph_from_internal_data(labels)
         G.layout("dot")
+
+        G.graph_attr["label"]   = title
         
         G.node_attr["shape"]    = 'note'
         G.node_attr["color"]    = "#a41e35"
