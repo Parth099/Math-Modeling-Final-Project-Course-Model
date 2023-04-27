@@ -6,7 +6,7 @@ This file defines the <Course> Object used to
 from typing import List
 
 class Course: 
-    def __init__(self, code: str, name: str, classsize: int, creditno: int, coursetype, preqs: List['Course'], requirements: List[str]) -> None:
+    def __init__(self, code: str, name: str, classsize: int, creditno: int, coursetype: int, preqs: List['Course'], requirements: List[str]) -> None:
         self.code          = code         # unique class id
         self.name          = name         # Name
         self.creditno      = creditno     
@@ -15,6 +15,7 @@ class Course:
         self.coursetype    = coursetype   # type of class EX: gened, major, ...
         self.requirements  = requirements # list of requirements needed to be met to join class (bucketing)
 
+        # did not use but was planning
         self.grading__mu    = None        
         self.grading__sigma = None
 

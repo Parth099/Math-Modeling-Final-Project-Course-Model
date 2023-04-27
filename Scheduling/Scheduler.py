@@ -1,8 +1,10 @@
 from Scheduling.Models.Course import Course
 from Scheduling.Models.Student import Student
 
+from collections import defaultdict
+
 from random import shuffle, randint, sample
-from typing import List, Dict, Counter
+from typing import List, Dict, Counter, DefaultDict
 
 from collections import Counter
 
@@ -17,6 +19,8 @@ class Scheduler:
         self.course_map = course_map
         self.__courses = Courses
         self.requirements = requirements
+
+        self.bottlenecks: DefaultDict[Course, int]  = defaultdict(int)
 
         # int -> Course Map
         self.courses: Dict[int, Course] = {}
@@ -150,6 +154,8 @@ class Scheduler:
                 # assign to student if there is space left
                 if self.update_class_capacity(class_index):
                     stu.assign_class(C)
+                else:
+                    self.bottlenecks[C] += 1 
 
     def increment_semester(self):
         """Move each student up a semester"""
@@ -159,7 +165,6 @@ class Scheduler:
 
         # reset capacity
         self.read_class_capacity(self.courses)
-        self.semesterDT += 1
 
     def get_highest_semester(self):
         return max([stu.semester for stu in self.students], default=0)

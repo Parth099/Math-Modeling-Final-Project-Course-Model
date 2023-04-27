@@ -109,6 +109,9 @@ class DAGGenerator():
         
         G.node_attr["shape"]    = 'note'
         G.node_attr["color"]    = "#a41e35"
+        G.graph_attr['padding']    = '1.5'
+        G.graph_attr['resolution'] = 300
+
         return G
  
     

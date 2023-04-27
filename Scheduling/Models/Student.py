@@ -11,12 +11,18 @@ class Student:
     """this class must be created synchronously due to $student_count internal variable"""
     
     student_count = 0
-    FAILING_GRADE = 65
+    FAILING_GRADE = 63
     
-    DEFAULT_GRADE_MEAN = 80
+    DEFAULT_GRADE_MEAN = 75
     DEFAULT_GRADE_SDEV = 10
+
+    # use past course history to impact current grade
+    HISTORY_BASED_GRADING = True
     
-    def __init__(self, course_map: Dict[str, int], course_plan: List[int] = []):
+    def __init__(self, course_map: Dict[str, int], course_plan: List[int]=[], HISTORY_BASED_GRADING=True):
+
+        # alter class state
+        Student.HISTORY_BASED_GRADING = HISTORY_BASED_GRADING
         
         # constants
         self.course_plan = course_plan
@@ -24,8 +30,9 @@ class Student:
         self.course_map = course_map
         
         # boundary variables
-        self.has_finished = False
         self.semester = 0
+        self.is_finished = False
+        
     
 		# state to keep track of what classes student is taking/taken
         self.has_taken:  List[Course] = [] # can also be used as a history
@@ -35,8 +42,7 @@ class Student:
         
         self.curr_credit_count = 0
         self.credit_count = 0
-        self.is_finished = False
-        
+
         # update school count
         Student.student_count += 1
         
@@ -63,7 +69,8 @@ class Student:
         mu = Student.DEFAULT_GRADE_MEAN;    
         past_grades = self.get_grades_for_courses(course.prerequisites)
         
-        if past_grades:
+        # if HISTORY_BASED_GRADING check what the student got for prev classes
+        if Student.HISTORY_BASED_GRADING and past_grades:
             mu = mean(past_grades)
         
         return normal(mu, Student.DEFAULT_GRADE_SDEV)

@@ -1,7 +1,12 @@
 {
     "requirements": {
         "major - intro": 1,
-        "major - electives": 3
+        "major - electives": 3,
+        "gened_gen": 1,
+        "gened_art": 1,
+        "gened_sci": 1,
+        "gened_human": 1,
+        "gened_hist": 1
     },
     "courses": [
         {
