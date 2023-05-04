@@ -1,5 +1,5 @@
 from collections import defaultdict
-import sys
+import sys, getopt
 import os
 
 from typing import List
@@ -117,13 +117,66 @@ class CourseABM():
         plt.title(f"Classes Reqested by Students (Student={self.num_students})")
         plt.savefig(f'./img/{output_name}')
 
+def main(num_students=150, USE_HISTORY_BASED_GRADING=False):
+    """Runs the core event loop and generates all graphics with default settings
 
-# run script
-if __name__ == '__main__':
-    ABM = CourseABM("./data/prereq.json", 150, USE_HISTORY_BASED_GRADING=0)
+    Args:
+        num_students (int, optional): Number of students in sim. Defaults to 150.
+        USE_HISTORY_BASED_GRADING (bool, optional): Use history based grading?. Defaults to `False`.
+    """
+    ABM = CourseABM("./data/prereq.json", num_students, USE_HISTORY_BASED_GRADING=USE_HISTORY_BASED_GRADING)
     ABM.run()
     __skew, __ave = ABM.gen_semester_dist()
     ABM.gen_graphs()
     ABM.gen_bottleneck_chart()
+
+def usage():
+    print("Options:")
+    print("-h or --history to trigger history-based grading")
+    print("-n or --num_students to change the number of students, default at 150.")
+
+    print("Example usage:")
+    print("\t python abm.py -h")
+    print("\t python abm.py --history")
+    print("Both commands above will trigger history based grading")
+    print("\t python abm.py -n 200")
+    print("\t python abm.py --num_students=200")
+    print("Both commands above will increase the number of students to 200 from the default of 150")
+    print("\t python abm.py -h -n 200")
+    print("Command above will trigger history and increase the number of students to 200")
+
+# run script
+if __name__ == '__main__':
+
+ 
+
+    # default settings
+    num_students = 150
+    USE_HISTORY_BASED_GRADING = False
+
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "hn:", ["history", "num_students="])
+    except getopt.GetoptError as err:
+        # print help information and exit:
+        print(err)  # will print something like "option -a not recognized"
+        usage()
+        sys.exit(2)
+
+    # loop and collect all options
+    for opt, arg in opts:
+        if opt in ("-h", '--history'):
+            USE_HISTORY_BASED_GRADING = True
+        elif opt in ("-n", "--num_students"):
+            try:
+                num_students = int(arg)
+            except:
+                print("failed to convert num_students argument into number")
+                usage()
+                sys.exit(2)
+
+    # run when all commands are collected
+    print(f"Ran with {num_students} students and history based grading set to '{USE_HISTORY_BASED_GRADING}'.")
+    main(num_students, USE_HISTORY_BASED_GRADING)
+
 
 
