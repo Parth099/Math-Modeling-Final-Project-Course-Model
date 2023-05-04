@@ -1,12 +1,10 @@
+from collections import defaultdict, Counter
+from random import shuffle, randint, sample
+from typing import List, Dict, DefaultDict
+
+
 from Scheduling.Models.Course import Course
 from Scheduling.Models.Student import Student
-
-from collections import defaultdict
-
-from random import shuffle, randint, sample
-from typing import List, Dict, Counter, DefaultDict
-
-from collections import Counter
 
 
 class Scheduler:
