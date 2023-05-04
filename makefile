@@ -1,4 +1,6 @@
 install-deps:
+	sudo add-apt-repository universe
+	sudo apt update
 	sudo apt-get install python-dev graphviz libgraphviz-dev pkg-config
 	pip install Cython
 	pip install pipreqsnb
