@@ -8,7 +8,7 @@ install-deps:
 	pip install -r ./requirements.txt
 
 run:
-	python abm.py
+	python abm.py -h -n 150
 
 clean:
 	rm -rf ./img/sem*

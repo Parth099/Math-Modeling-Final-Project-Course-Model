@@ -4,5 +4,5 @@ __pycache__
 test*
 img/sem*
 
-# venv stuff
 CC-venv
+.obsidian
