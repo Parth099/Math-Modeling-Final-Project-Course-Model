@@ -112,7 +112,7 @@ class CourseABM():
         """generates a histogram of number of semesters it took to grad and places it in  destination:`./img/{output_name}`
 
         Args:
-            output_name (str, optional): Output name. Defaults to "sem-hist.png".
+            output_name (str | None, optional): Output name. Defaults to "sem-hist.png". Select None If you want no figure
 
         Returns:
             tuple of (`skew`, `average`) of num semesters to graduate
@@ -122,17 +122,18 @@ class CourseABM():
         semester_skew = skew(semester_counts) 
         ave = np.mean(semester_counts)
 
-        # make bins discreet to help with charts
-        bins = np.arange(6-0.5, np.max(semester_counts)+3-0.5, 1)
-        plt.hist(semester_counts, bins=bins, edgecolor="black")
+        if output_name is not None:
+            # make bins discreet to help with charts
+            bins = np.arange(6-0.5, np.max(semester_counts)+3-0.5, 1)
+            plt.hist(semester_counts, bins=bins, edgecolor="black")
 
-        plt.title("# Semesters taken Graduation average={__ave:.4f}, skew={__skew:.4f}".format(__skew=semester_skew, __ave=ave))
-        plt.ylabel(f"# Students (Students={self.num_students})")
-        plt.xlabel("# Semesters")
+            plt.title("# Semesters taken Graduation average={__ave:.4f}, skew={__skew:.4f}".format(__skew=semester_skew, __ave=ave))
+            plt.ylabel(f"# Students (Students={self.num_students})")
+            plt.xlabel("# Semesters")
 
-        # save to destination
-        plt.savefig(f"./img/{output_name}")
-        plt.clf()
+            # save to destination
+            plt.savefig(f"./img/{output_name}")
+            plt.clf()
 
         return semester_skew, ave
 
@@ -140,7 +141,7 @@ class CourseABM():
         """Generates bar chart of number of waitlist requests per class and places it in  destination:`./img/{output_name}
 
         Args:
-            output_name (str, optional): Output name. Defaults to "sem-bn.png".
+            output_name (str, optional): Output name. Defaults to "sem-bn.png". 
         """
 
         bottlenecks = self.scheduler.bottlenecks
@@ -170,14 +171,27 @@ def main(num_students=150, USE_HISTORY_BASED_GRADING=False):
         num_students (int, optional): Number of students in sim. Defaults to 150.
         USE_HISTORY_BASED_GRADING (bool, optional): Use history based grading?. Defaults to `False`.
     """
-    ABM = CourseABM("./data/prereq.json", num_students, USE_HISTORY_BASED_GRADING=USE_HISTORY_BASED_GRADING)
 
-    print(f"Running with {ABM.CPUs} CPU cores.")
+    skew = []
+    ave  = []
 
-    ABM.run()
-    __skew, __ave = ABM.gen_semester_dist()
-    ABM.gen_graphs()
-    ABM.gen_bottleneck_chart()
+    for x in range(100):
+        ABM = CourseABM("./data/prereq.json", num_students, USE_HISTORY_BASED_GRADING=USE_HISTORY_BASED_GRADING)
+        
+        if not x % 100:
+            print(x)
+
+        ABM.run()
+        name = f"sem-hist-{x}.png"
+        __skew, __ave = ABM.gen_semester_dist(name)
+
+        skew = skew + [__skew]
+        ave = ave + [__ave]
+
+        #ABM.gen_graphs()
+        #ABM.gen_bottleneck_chart()
+
+    print(f'skew={np.mean(skew)}, ave={np.mean(ave)}')
 
 def usage():
     print("Options:")
