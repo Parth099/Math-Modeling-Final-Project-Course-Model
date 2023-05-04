@@ -126,7 +126,7 @@ class CourseABM():
         bins = np.arange(6-0.5, np.max(semester_counts)+3-0.5, 1)
         plt.hist(semester_counts, bins=bins, edgecolor="black")
 
-        plt.title("# Semesters taken Graduation average={__ave:.4f},skew={__skew:.4f}".format(__skew=semester_skew, __ave=ave))
+        plt.title("# Semesters taken Graduation average={__ave:.4f}, skew={__skew:.4f}".format(__skew=semester_skew, __ave=ave))
         plt.ylabel(f"# Students (Students={self.num_students})")
         plt.xlabel("# Semesters")
 

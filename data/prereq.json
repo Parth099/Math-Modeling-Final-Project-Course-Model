@@ -166,7 +166,7 @@
             "code": "CIS3207",
             "name": "Introduction to Systems Programming and Operating Systems",
             "creditno": 4,
-            "classsize": 75,
+            "classsize": 100,
             "prerequisites": ["CIS2107", "CIS2168", "CIS1166"],
             "coursetype": "major",
             "requirements": []

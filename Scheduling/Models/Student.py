@@ -17,9 +17,16 @@ class Student:
     DEFAULT_GRADE_SDEV = 10
 
     # use past course history to impact current grade
-    HISTORY_BASED_GRADING = True
+    HISTORY_BASED_GRADING = False
     
-    def __init__(self, course_map: Dict[str, int], course_plan: List[int]=[], HISTORY_BASED_GRADING=True):
+    def __init__(self, course_map: Dict[str, int], course_plan: List[int]=[], HISTORY_BASED_GRADING=False):
+        """Initialize a student
+
+        Args:
+            course_map (Dict[str, int]): course to integer mapping to help calulate prereqs\n
+            course_plan (List[int], optional): Courses to take. Defaults to [].\n
+            HISTORY_BASED_GRADING (bool, optional): Use history based grading or random? . Defaults to False (history based grading).
+        """
 
         # alter class state
         Student.HISTORY_BASED_GRADING = HISTORY_BASED_GRADING
@@ -72,8 +79,10 @@ class Student:
         # if HISTORY_BASED_GRADING check what the student got for prev classes
         if Student.HISTORY_BASED_GRADING and past_grades:
             mu = mean(past_grades)
-        
-        return normal(mu, Student.DEFAULT_GRADE_SDEV)
+
+        grade = normal(mu, Student.DEFAULT_GRADE_SDEV)
+
+        return min(grade, 100) # do not give grades over 100
     
     def get_grades_for_courses(self, courses: List[Course]):
         """gets grades for class given a list of classes

@@ -10,7 +10,7 @@ from Scheduling.Models.Student import Student
 class Scheduler:
     """Scheduler takes steps WRT open courses and availble"""
 
-    CREDITS_THRESHOLD = 14
+    CREDITS_THRESHOLD = 18
 
     def __init__(self, Students: List[Student], Courses: Dict[str, Course], course_map: Dict[str, int], requirements: Dict[str, int]) -> None:
         self.students     = Students
