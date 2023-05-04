@@ -1,11 +1,8 @@
-#! important
-# add this module to $path to allow python to find it later
+from collections import defaultdict
 import sys
 import os
-sys.path.insert(0, os.getcwd())
 
-from collections import defaultdict
-
+from typing import List
 import matplotlib.pyplot as plt
 import numpy as np
 from scipy.stats import skew
@@ -18,8 +15,7 @@ from Scheduling.Scheduler import Scheduler
 from Scheduling.Models.Student import Student
 from Scheduling.Models.Course import Course
 
-from typing import List
-
+sys.path.insert(0, os.getcwd())
 
 """
 Questions an this ABM can answer:
@@ -79,7 +75,7 @@ class CourseABM():
 
 
             self.DAG.draw_graph_via_PYG(labels, f'Semeter {semester+1}') \
-                .draw(f'./img/sample-{semester}.png', format='png')
+                .draw(f'./img/semester-{semester}.png', format='png')
 
     def gen_semester_dist(self, output_name="sem-hist.png"):
         semester_counts = [stu.semester for stu in self.students]

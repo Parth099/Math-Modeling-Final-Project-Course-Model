@@ -2,27 +2,26 @@
 
 > This is the repo to hold my final project for MATH2111: Mathematical Modeling
 
-## Project Dependencies
+## Running the project
 
-Required Modules are located in `requirements.txt`
+Since we are on a containerized code space, not much has to be installed for this project to run.
 
-If this item is not included it can be generated via:
+### Installing Dependencies
 
-```shell
-pip install pipreqsnb
-pipreqsnb . --force
-```
+> Each command below must be pased in the terminal.
 
-### Install Guide
 
-#### `pygraphviz`
-
-This project uses pygraphviz to generate (some) graphs. The installation guide for this is located [here](https://pygraphviz.github.io/documentation/latest/install.html). It is nothing more than a set of commmands to run based on your operating system.
-
-#### Everything else
-
-To install all dependencies:
+I have aliased the following command to generate a dependency list and install it:
 
 ```shell
-pip install -r ./requirements.txt
+make install-deps
 ```
+### Running the project
+
+The project can be ran via 
+
+```
+make run
+```
+
+You can edit the code in `abm.py` to run it with alternate settings.

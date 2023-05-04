@@ -4,7 +4,5 @@ __pycache__
 test*
 img/
 
-# learning python files
-decorators.py
-learning-flask/
-learining-FASTAPI/
+# venv stuff
+CC-venv
