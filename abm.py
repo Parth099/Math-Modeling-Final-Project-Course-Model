@@ -2,6 +2,9 @@ from collections import defaultdict
 import sys, getopt
 import os
 
+from threading import Thread
+import os
+
 from typing import List
 import matplotlib.pyplot as plt
 import numpy as np
@@ -42,7 +45,8 @@ class CourseABM():
         self.courses   = CDL.course_info
         self.scheduler = Scheduler(self.students, self.courses, CDL.course_map, CDL.grad_reqs)
 
-        self.has_run = False # flag to check of there is data attached to simulation
+        self.has_run   = False # flag to check of there is data attached to simulation
+        self.CPUs: int = 1 if os.cpu_count() is None or os.cpu_count() <= 0 else os.cpu_count() #  
 
     # run semesters
     def run(self, verbose=False):
@@ -56,17 +60,14 @@ class CourseABM():
 
         self.has_run = True
 
-    def gen_graphs(self):
-        """Generates the graph (edge, node) for each semester based on pass and fail counts
 
-        Raises:
-            RuntimeError: generated if there is no data to gen graph for and method is still called
+    def __gen_graphs_helper(self, semester_no: List[int]):
+        """helper that generates one chart based on the semester number (used in multi-processing) given by the List
+
+        Args:
+            semester_no (List[int]): semester number the graph needs to be generated for
         """
-
-        if not self.has_run:
-            raise RuntimeError("gen_graph called before run()")
-
-        for semester in range(self.scheduler.get_highest_semester()+1):
+        for semester in semester_no:
             pass_count, fail_count = self.scheduler.get_passing_and_failing_counts(semester)
 
             # default label is empty (no data about a class is shown)
@@ -77,10 +78,36 @@ class CourseABM():
                 _label = f'Passed: {pass_count[key]}\nFailed: {fail_count[key]}'
                 labels[key] = _label
 
-
             self.DAG.draw_graph_via_PYG(labels, f'Semeter {semester+1}') \
-                .draw(f'./img/semester-{semester}.png', format='png')
+                .draw(f'./img/semester-{semester+1}.png', format='png')
 
+    def gen_graphs(self):
+        """Generates the graph (edge, node) for each semester based on pass and fail counts
+
+        Raises:
+            RuntimeError: generated if there is no data to gen graph for and method is still called
+        """
+
+        if not self.has_run:
+            raise RuntimeError("gen_graph called before run()")
+
+        MAX_SEMESTER = self.scheduler.get_highest_semester() + 1
+        semesters    = np.arange(MAX_SEMESTER)
+        thread_args  = np.array_split(semesters, self.CPUs) # split number of semesters by CPU numbers to run image generation on each core
+
+        threads: List[Thread] = [None] * len(thread_args)
+
+        # start threads
+        for i, args in enumerate(thread_args):
+            threads[i] = Thread(target=self.__gen_graphs_helper, args=([args]))
+            threads[i].start()
+
+
+        # join threads to wait on them
+        [thread.join() for thread in threads]
+            
+
+            
     def gen_semester_dist(self, output_name="sem-hist.png"):
         """generates a histogram of number of semesters it took to grad and places it in  destination:`./img/{output_name}`
 
@@ -91,7 +118,7 @@ class CourseABM():
             tuple of (`skew`, `average`) of num semesters to graduate
         """
 
-        semester_counts = [stu.semester for stu in self.students]
+        semester_counts = np.array([stu.semester for stu in self.students]) + 1 # +1 due to zero indexing
         semester_skew = skew(semester_counts) 
         ave = np.mean(semester_counts)
 
@@ -144,6 +171,9 @@ def main(num_students=150, USE_HISTORY_BASED_GRADING=False):
         USE_HISTORY_BASED_GRADING (bool, optional): Use history based grading?. Defaults to `False`.
     """
     ABM = CourseABM("./data/prereq.json", num_students, USE_HISTORY_BASED_GRADING=USE_HISTORY_BASED_GRADING)
+
+    print(f"Running with {ABM.CPUs} CPU cores.")
+
     ABM.run()
     __skew, __ave = ABM.gen_semester_dist()
     ABM.gen_graphs()
