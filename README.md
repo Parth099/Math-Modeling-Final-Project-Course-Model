@@ -19,6 +19,8 @@ Since we are on a containerized code space, not much has to be installed for thi
 
 I have aliased the following command to generate a dependency list and install it:
 
+When it asks `[Y/n]` select `Y` for `yes`. When applications need space they will prompt you.
+
 ```shell
 make install-deps
 ```
