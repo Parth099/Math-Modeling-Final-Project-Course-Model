@@ -13,9 +13,9 @@ class Scheduler:
     CREDITS_THRESHOLD = 14
 
     def __init__(self, Students: List[Student], Courses: Dict[str, Course], course_map: Dict[str, int], requirements: Dict[str, int]) -> None:
-        self.students = Students
-        self.course_map = course_map
-        self.__courses = Courses
+        self.students     = Students
+        self.course_map   = course_map
+        self.__courses    = Courses
         self.requirements = requirements
 
         self.bottlenecks: DefaultDict[Course, int]  = defaultdict(int)
@@ -54,7 +54,7 @@ class Scheduler:
                 KeyError: on invalid `selected_class`
 
         Returns:
-                _type_: T/F on if the student was placed in the class
+                (bool): T/F on if the student was placed in the class
         """
 
         if selected_class not in self.__class_caps:

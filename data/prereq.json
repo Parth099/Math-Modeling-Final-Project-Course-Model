@@ -130,7 +130,7 @@
             "code": "CIS2168",
             "name": "Data Structures",
             "creditno": 4,
-            "classsize": 150,
+            "classsize": 140,
             "prerequisites": ["CIS1068", "MATH1041", "CIS1166"],
             "coursetype": "major",
             "requirements": []
@@ -166,7 +166,7 @@
             "code": "CIS3207",
             "name": "Introduction to Systems Programming and Operating Systems",
             "creditno": 4,
-            "classsize": 100,
+            "classsize": 75,
             "prerequisites": ["CIS2107", "CIS2168", "CIS1166"],
             "coursetype": "major",
             "requirements": []

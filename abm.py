@@ -17,27 +17,23 @@ from Scheduling.Models.Course import Course
 
 sys.path.insert(0, os.getcwd())
 
-"""
-Questions an this ABM can answer:
-    1.  Given a course list of prereqs how long will students take to complete it?
-        Params: Class-sizes (not yet implmented), Grade dists (data not yet collected)
-        
-    2. How will classsizes create an emergence of bottlenecking classes (small classsize vs large student body)
-        Will there be a group of students moving together?
-    
-    3. Effectness of "weed-out classess"
-"""
-
-# colors
-BLUE = "#0064cd"
-RED  = "#a41e35"
-
-### KEEP TRACK OF STUDENTS PER LEVEL
 class CourseABM():
+    """`CourseABM` conbines underlying subclasses to create an interface that is easy to use to run simulations"""
+
+    # colors for bottleneck chart
+    BLUE = "#0064cd"
+    RED  = "#a41e35"
 
     def __init__(self, datapath: str, num_students: int, USE_HISTORY_BASED_GRADING=True) -> None:
+        """initialize all subclasses and read in Course data to create all course based data structures. This function will create students and assign them a course plan.
+
+        Args:
+            datapath (str): path to course data\n
+            num_students (int): number of students to use in simulation\n
+            USE_HISTORY_BASED_GRADING (bool, optional): Use history based grading? . Defaults to True.
+        """
         self.num_students = num_students
-        COURSE_DATA_PATH = datapath        # path to file to be load
+        COURSE_DATA_PATH  = datapath        # path to file to be load
 
         CDL      = CourseDataLoader(COURSE_DATA_PATH)
         self.DAG = DAGGenerator(CDL.course_info, CDL.course_map)
@@ -46,10 +42,13 @@ class CourseABM():
         self.courses   = CDL.course_info
         self.scheduler = Scheduler(self.students, self.courses, CDL.course_map, CDL.grad_reqs)
 
-        self.has_run = False
+        self.has_run = False # flag to check of there is data attached to simulation
 
     # run semesters
     def run(self, verbose=False):
+        """
+        increments the timestep (semester number) until all students graduate
+        """
         while not all([stu.is_finished for stu in self.students]):
             self.scheduler.assign_classes() # could be multi thread
             self.scheduler.increment_semester() # could be multi threaded
@@ -58,6 +57,11 @@ class CourseABM():
         self.has_run = True
 
     def gen_graphs(self):
+        """Generates the graph (edge, node) for each semester based on pass and fail counts
+
+        Raises:
+            RuntimeError: generated if there is no data to gen graph for and method is still called
+        """
 
         if not self.has_run:
             raise RuntimeError("gen_graph called before run()")
@@ -78,6 +82,15 @@ class CourseABM():
                 .draw(f'./img/semester-{semester}.png', format='png')
 
     def gen_semester_dist(self, output_name="sem-hist.png"):
+        """generates a histogram of number of semesters it took to grad and places it in  destination:`./img/{output_name}`
+
+        Args:
+            output_name (str, optional): Output name. Defaults to "sem-hist.png".
+
+        Returns:
+            tuple of (`skew`, `average`) of num semesters to graduate
+        """
+
         semester_counts = [stu.semester for stu in self.students]
         semester_skew = skew(semester_counts) 
         ave = np.mean(semester_counts)
@@ -87,7 +100,7 @@ class CourseABM():
         plt.hist(semester_counts, bins=bins, edgecolor="black")
 
         plt.title("# Semesters taken Graduation average={__ave:.4f},skew={__skew:.4f}".format(__skew=semester_skew, __ave=ave))
-        plt.ylabel("# Students")
+        plt.ylabel(f"# Students (Students={self.num_students})")
         plt.xlabel("# Semesters")
 
         # save to destination
@@ -97,6 +110,12 @@ class CourseABM():
         return semester_skew, ave
 
     def gen_bottleneck_chart(self, output_name="sem-bn.png"):
+        """Generates bar chart of number of waitlist requests per class and places it in  destination:`./img/{output_name}
+
+        Args:
+            output_name (str, optional): Output name. Defaults to "sem-bn.png".
+        """
+
         bottlenecks = self.scheduler.bottlenecks
 
         # sort to get most requested classes at the end
@@ -111,10 +130,10 @@ class CourseABM():
 
         x_axis = np.arange(len(courses))
 
-        bar_colors = [RED if c.coursetype == 'major' else BLUE for c in courses ]
+        bar_colors = [CourseABM.RED if c.coursetype == 'major' else CourseABM.BLUE for c in courses ]
 
         plt.bar(x_axis, num_req, width=0.2, tick_label=courses, color=bar_colors)
-        plt.title(f"Classes Reqested by Students (Student={self.num_students})")
+        plt.title(f"Classes Reqested by Students (Students={self.num_students})")
         plt.savefig(f'./img/{output_name}')
 
 def main(num_students=150, USE_HISTORY_BASED_GRADING=False):
@@ -145,10 +164,8 @@ def usage():
     print("\t python abm.py -h -n 200")
     print("Command above will trigger history and increase the number of students to 200")
 
-# run script
+# run script based on cmd options
 if __name__ == '__main__':
-
- 
 
     # default settings
     num_students = 150
@@ -175,8 +192,9 @@ if __name__ == '__main__':
                 sys.exit(2)
 
     # run when all commands are collected
-    print(f"Ran with {num_students} students and history based grading set to '{USE_HISTORY_BASED_GRADING}'.")
+    print(f"Started running with {num_students} students and history based grading set to '{USE_HISTORY_BASED_GRADING}'.")
     main(num_students, USE_HISTORY_BASED_GRADING)
+    print(f"Finished running with {num_students} students and history based grading set to '{USE_HISTORY_BASED_GRADING}'.")
 
 
 
