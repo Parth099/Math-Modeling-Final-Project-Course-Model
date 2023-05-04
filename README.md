@@ -9,7 +9,11 @@ Since we are on a containerized code space, not much has to be installed for thi
 ### Getting on Codespaces
 
 1. Go to the [Repo](https://github.com/Parth099/Math-Modeling-Final-Project-Course-Model)
-2. ![./assets/step2.png](./assets/step2.png)
+
+2. You can choose to join an existing code space or create one
+
+![./assets/step2.png](./assets/step2.png)
+
 3. You can create a new codespace or enter once of the existing code spaces.
 4. Thats it! You can now move to the next section in the readme!
 
