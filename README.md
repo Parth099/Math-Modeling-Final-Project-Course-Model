@@ -2,6 +2,11 @@
 
 > This is the repo to hold my final project for MATH2111: Mathematical Modeling
 
+| Report | Presentation |
+| -------|--------------|
+| [Docx](https://github.com/Parth099/Math-Modeling-Final-Project-Course-Model/blob/main/ppatel%20-%20MATH2121%20-%20CourseCompass%20Final%20Report.docx)| [Slides](https://github.com/Parth099/Math-Modeling-Final-Project-Course-Model/blob/main/ppatel%20-%20MATH2121%20-%20CourseCompass%20ABM%20presentation.pptx) |
+| [Google Docs](https://docs.google.com/document/d/1DMVO9tJYxii_xFB0Rmuuvs_ETWEbDS9pbX4VUpyY0GE/edit?usp=sharing) | [Google Slides](https://docs.google.com/presentation/d/1PY3CsMo0ynnA305JA5orzcTsi48rlPaYL03lD14_Eds/edit?usp=sharing) |
+
 ## Running the project in `Github Codespaces`
 
 Since we are on a containerized code space, not much has to be installed for this project to run.
